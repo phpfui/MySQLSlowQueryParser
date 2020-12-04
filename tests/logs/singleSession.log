@@ -1,0 +1,1230 @@
+c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL). started with:
+TCP Port: 3306, Named Pipe: /tmp/mysql.sock
+Time                 Id Command    Argument
+# Time: 2020-12-02T19:08:43.462468Z
+# User@Host: root[root] @ localhost [::1]  Id:     8
+# Query_time: 0.001519  Lock_time: 0.000214 Rows_sent: 0  Rows_examined: 0
+use avance;
+SET timestamp=1606936123;
+SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesting_event_id = 17;
+# Time: 2020-12-02T19:08:43.464951Z
+# User@Host: root[root] @ localhost [::1]  Id:     8
+# Query_time: 0.002284  Lock_time: 0.000173 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606936123;
+SELECT st.* FROM performance_schema.events_waits_history_long st WHERE st.nesting_event_id = 17;
+# Time: 2020-12-02T20:05:00.650946Z
+# User@Host: root[root] @ localhost [::1]  Id:    14
+# Query_time: 0.062181  Lock_time: 0.001285 Rows_sent: 1  Rows_examined: 414
+SET timestamp=1606939500;
+SELECT * FROM Tercero WHERE tipoTercero like '%*17*%';
+# Time: 2020-12-02T20:05:04.460962Z
+# User@Host: root[root] @ localhost [::1]  Id:    16
+# Query_time: 0.007354  Lock_time: 0.000331 Rows_sent: 1  Rows_examined: 1
+SET timestamp=1606939504;
+SELECT * FROM SegLogin WHERE usuarioLogin = 'aintegral' AND active=1 LIMIT 1;
+# Time: 2020-12-02T20:05:04.602866Z
+# User@Host: root[root] @ localhost [::1]  Id:    17
+# Query_time: 0.003723  Lock_time: 0.000374 Rows_sent: 1  Rows_examined: 414
+SET timestamp=1606939504;
+SELECT * FROM Tercero WHERE `tipoTercero` LIKE '%*17*%';
+# Time: 2020-12-02T20:05:04.612387Z
+# User@Host: root[root] @ localhost [::1]  Id:    18
+# Query_time: 0.002032  Lock_time: 0.000155 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606939504;
+SELECT idUsuario,modulos FROM SoporteMail where idUsuario=1;
+# Time: 2020-12-02T20:05:04.648895Z
+# User@Host: root[root] @ localhost [::1]  Id:    18
+# Query_time: 0.007020  Lock_time: 0.000237 Rows_sent: 2  Rows_examined: 6
+SET timestamp=1606939504;
+select idAlerta,idAlertaUsuario,
+               estadoAlerta,
+               procesoAlerta,
+               descripcionAlerta  from Alerta, AlertaUsuario  WHERE estadoAlerta = 1 and Usuario_idUsuario = 1 and Alerta_idAlerta = idAlerta and estadoAlertaUsuario = 1  order by descripcionAlerta;
+# Time: 2020-12-02T20:05:04.686005Z
+# User@Host: root[root] @ localhost [::1]  Id:    18
+# Query_time: 0.035847  Lock_time: 0.000249 Rows_sent: 165  Rows_examined: 668
+SET timestamp=1606939504;
+SELECT
+                CASE
+                WHEN (SO.tipoSegOpcion = "F") THEN concat("formularios/", SO.archivoSegOpcion)
+                WHEN (SO.tipoSegOpcion = "I") THEN concat("interfaces/", SO.archivoSegOpcion)
+                WHEN (SO.tipoSegOpcion = "R") THEN concat("informes/", SO.archivoSegOpcion)
+                END as archivoSegOpcion2,
+                SO.idSegOpcion,
+                SPQ.idSegPaquete,
+                SM.idSegModulo,
+                SPQ.claseSegPaquete,
+                SPQ.nombreSegPaquete,
+                SM.nombreSegModulo,
+                SO.nombreSegOpcion
+            FROM SegPermiso SP
+            LEFT JOIN SegRol SR ON SR.idSegRol = SP.SegRol_idSegRol
+            LEFT JOIN SegLogin SL ON SL.SegRol_idSegRol = SR.idSegRol
+            LEFT JOIN SegOpcion SO ON SO.idSegOpcion = SP.SegOpcion_idSegOpcion
+            LEFT JOIN SegModulo SM ON SM.idSegModulo = SO.SegModulo_idSegModulo
+            LEFT JOIN SegPaquete SPQ ON SPQ.idSegPaquete = SM.SegPaquete_idSegPaquete
+            LEFT JOIN Lenguaje LM ON SM.idSegModulo = SO.SegModulo_idSegModulo AND LM.idLenguaje = SM.idLenguaje
+            LEFT JOIN Lenguaje LO ON SO.idSegOpcion = SP.SegOpcion_idSegOpcion AND LO.idLenguaje = SO.idLenguaje
+            LEFT JOIN Lenguaje LP ON SPQ.idSegPaquete = SM.SegPaquete_idSegPaquete AND LP.idLenguaje = SPQ.idLenguaje
+            WHERE SL.id = 1 AND SP.SegOpcion_idSegOpcion > 0
+            ORDER BY SPQ.idSegPaquete, SM.nombreSegModulo, SO.nombreSegOpcion;
+# Time: 2020-12-02T20:05:04.697610Z
+# User@Host: root[root] @ localhost [::1]  Id:    18
+# Query_time: 0.007574  Lock_time: 0.000272 Rows_sent: 4  Rows_examined: 19
+SET timestamp=1606939504;
+SELECT
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN concat("formularios/movimientoCRM.grid.php?iddocumentocrm=",idDocumentoCRM)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Gestión CRM"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Documentos CRM"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "icon-users"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 3
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 9
+           ELSE NULL
+           END AS idSegModulo, DCR.*
+           from viewDocumentoCRMSeguridad DCR where id=1;
+# Time: 2020-12-02T20:05:04.702944Z
+# User@Host: root[root] @ localhost [::1]  Id:    18
+# Query_time: 0.005181  Lock_time: 0.000330 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606939504;
+SELECT
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN concat("formularios/empaque.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN concat("formularios/flujologistica.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN concat("formularios/ordentrabajo.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0)THEN "Gestión Logística"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN "Documentos de Empaque"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN "Flujos de Producto"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN "Ordenes de Trabajo"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN "Almacenamiento"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN "Picking"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN "icon-box-remove"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 9
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 22
+           ELSE NULL
+           END AS idSegModulo,DES.*
+          FROM viewDocumentoEmpaqueSeguridad DES
+          WHERE DES.id=1;
+# Time: 2020-12-02T20:05:04.856591Z
+# User@Host: root[root] @ localhost [::1]  Id:    26
+# Query_time: 0.002700  Lock_time: 0.000418 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1606939504;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-02T22:30:35.190389Z
+# User@Host: root[root] @ localhost [::1]  Id:   211
+# Query_time: 0.000850  Lock_time: 0.000465 Rows_sent: 1  Rows_examined: 1
+SET timestamp=1606948235;
+SELECT * FROM SegLogin WHERE usuarioLogin = 'aintegral' AND active=1 LIMIT 1;
+# Time: 2020-12-02T22:30:35.368156Z
+# User@Host: root[root] @ localhost [::1]  Id:   212
+# Query_time: 0.007930  Lock_time: 0.000639 Rows_sent: 1  Rows_examined: 414
+SET timestamp=1606948235;
+SELECT * FROM Tercero WHERE `tipoTercero` LIKE '%*17*%';
+# Time: 2020-12-02T22:30:35.372436Z
+# User@Host: root[root] @ localhost [::1]  Id:   213
+# Query_time: 0.000454  Lock_time: 0.000239 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606948235;
+SELECT idUsuario,modulos FROM SoporteMail where idUsuario=1;
+# Time: 2020-12-02T22:30:35.376923Z
+# User@Host: root[root] @ localhost [::1]  Id:   213
+# Query_time: 0.001641  Lock_time: 0.000737 Rows_sent: 2  Rows_examined: 6
+SET timestamp=1606948235;
+select idAlerta,idAlertaUsuario,
+               estadoAlerta,
+               procesoAlerta,
+               descripcionAlerta  from Alerta, AlertaUsuario  WHERE estadoAlerta = 1 and Usuario_idUsuario = 1 and Alerta_idAlerta = idAlerta and estadoAlertaUsuario = 1  order by descripcionAlerta;
+# Time: 2020-12-02T22:30:35.394562Z
+# User@Host: root[root] @ localhost [::1]  Id:   213
+# Query_time: 0.001136  Lock_time: 0.000735 Rows_sent: 4  Rows_examined: 19
+SET timestamp=1606948235;
+SELECT
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN concat("formularios/movimientoCRM.grid.php?iddocumentocrm=",idDocumentoCRM)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Gestión CRM"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Documentos CRM"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "icon-users"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 3
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 9
+           ELSE NULL
+           END AS idSegModulo, DCR.*
+           from viewDocumentoCRMSeguridad DCR where id=1;
+# Time: 2020-12-02T22:30:35.396020Z
+# User@Host: root[root] @ localhost [::1]  Id:   213
+# Query_time: 0.001325  Lock_time: 0.000943 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606948235;
+SELECT
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN concat("formularios/empaque.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN concat("formularios/flujologistica.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN concat("formularios/ordentrabajo.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0)THEN "Gestión Logística"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN "Documentos de Empaque"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN "Flujos de Producto"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN "Ordenes de Trabajo"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN "Almacenamiento"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN "Picking"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN "icon-box-remove"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 9
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 22
+           ELSE NULL
+           END AS idSegModulo,DES.*
+          FROM viewDocumentoEmpaqueSeguridad DES
+          WHERE DES.id=1;
+# Time: 2020-12-02T22:30:35.652255Z
+# User@Host: root[root] @ localhost [::1]  Id:   221
+# Query_time: 0.001137  Lock_time: 0.000783 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1606948235;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-02T22:30:56.220462Z
+# User@Host: root[root] @ localhost [::1]  Id:   225
+# Query_time: 0.000425  Lock_time: 0.000256 Rows_sent: 1  Rows_examined: 1
+SET timestamp=1606948256;
+SELECT * FROM SegLogin WHERE usuarioLogin = 'aintegral' AND active=1 LIMIT 1;
+# Time: 2020-12-02T22:30:56.405642Z
+# User@Host: root[root] @ localhost [::1]  Id:   226
+# Query_time: 0.003206  Lock_time: 0.000492 Rows_sent: 1  Rows_examined: 414
+SET timestamp=1606948256;
+SELECT * FROM Tercero WHERE `tipoTercero` LIKE '%*17*%';
+# Time: 2020-12-02T22:30:56.408446Z
+# User@Host: root[root] @ localhost [::1]  Id:   227
+# Query_time: 0.000242  Lock_time: 0.000176 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606948256;
+SELECT idUsuario,modulos FROM SoporteMail where idUsuario=1;
+# Time: 2020-12-02T22:30:56.409777Z
+# User@Host: root[root] @ localhost [::1]  Id:   227
+# Query_time: 0.000356  Lock_time: 0.000220 Rows_sent: 2  Rows_examined: 6
+SET timestamp=1606948256;
+select idAlerta,idAlertaUsuario,
+               estadoAlerta,
+               procesoAlerta,
+               descripcionAlerta  from Alerta, AlertaUsuario  WHERE estadoAlerta = 1 and Usuario_idUsuario = 1 and Alerta_idAlerta = idAlerta and estadoAlertaUsuario = 1  order by descripcionAlerta;
+# Time: 2020-12-02T22:30:56.419336Z
+# User@Host: root[root] @ localhost [::1]  Id:   227
+# Query_time: 0.000936  Lock_time: 0.000665 Rows_sent: 4  Rows_examined: 19
+SET timestamp=1606948256;
+SELECT
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN concat("formularios/movimientoCRM.grid.php?iddocumentocrm=",idDocumentoCRM)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Gestión CRM"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Documentos CRM"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "icon-users"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 3
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 9
+           ELSE NULL
+           END AS idSegModulo, DCR.*
+           from viewDocumentoCRMSeguridad DCR where id=1;
+# Time: 2020-12-02T22:30:56.420711Z
+# User@Host: root[root] @ localhost [::1]  Id:   227
+# Query_time: 0.001137  Lock_time: 0.000856 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606948256;
+SELECT
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN concat("formularios/empaque.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN concat("formularios/flujologistica.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN concat("formularios/ordentrabajo.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0)THEN "Gestión Logística"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN "Documentos de Empaque"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN "Flujos de Producto"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN "Ordenes de Trabajo"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN "Almacenamiento"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN "Picking"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN "icon-box-remove"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 9
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 22
+           ELSE NULL
+           END AS idSegModulo,DES.*
+          FROM viewDocumentoEmpaqueSeguridad DES
+          WHERE DES.id=1;
+# Time: 2020-12-02T22:30:56.705863Z
+# User@Host: root[root] @ localhost [::1]  Id:   235
+# Query_time: 0.000722  Lock_time: 0.000474 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1606948256;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-02T22:31:30.764666Z
+# User@Host: root[root] @ localhost [::1]  Id:   239
+# Query_time: 0.000310  Lock_time: 0.000184 Rows_sent: 1  Rows_examined: 1
+SET timestamp=1606948290;
+SELECT * FROM SegLogin WHERE usuarioLogin = 'aintegral' AND active=1 LIMIT 1;
+# Time: 2020-12-02T22:31:30.907216Z
+# User@Host: root[root] @ localhost [::1]  Id:   240
+# Query_time: 0.003070  Lock_time: 0.000345 Rows_sent: 1  Rows_examined: 414
+SET timestamp=1606948290;
+SELECT * FROM Tercero WHERE `tipoTercero` LIKE '%*17*%';
+# Time: 2020-12-02T22:31:30.910932Z
+# User@Host: root[root] @ localhost [::1]  Id:   241
+# Query_time: 0.000329  Lock_time: 0.000210 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606948290;
+SELECT idUsuario,modulos FROM SoporteMail where idUsuario=1;
+# Time: 2020-12-02T22:31:30.913463Z
+# User@Host: root[root] @ localhost [::1]  Id:   241
+# Query_time: 0.000800  Lock_time: 0.000502 Rows_sent: 2  Rows_examined: 6
+SET timestamp=1606948290;
+select idAlerta,idAlertaUsuario,
+               estadoAlerta,
+               procesoAlerta,
+               descripcionAlerta  from Alerta, AlertaUsuario  WHERE estadoAlerta = 1 and Usuario_idUsuario = 1 and Alerta_idAlerta = idAlerta and estadoAlertaUsuario = 1  order by descripcionAlerta;
+# Time: 2020-12-02T22:31:30.920595Z
+# User@Host: root[root] @ localhost [::1]  Id:   241
+# Query_time: 0.000838  Lock_time: 0.000565 Rows_sent: 4  Rows_examined: 19
+SET timestamp=1606948290;
+SELECT
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN concat("formularios/movimientoCRM.grid.php?iddocumentocrm=",idDocumentoCRM)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Gestión CRM"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Documentos CRM"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "icon-users"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 3
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 9
+           ELSE NULL
+           END AS idSegModulo, DCR.*
+           from viewDocumentoCRMSeguridad DCR where id=1;
+# Time: 2020-12-02T22:31:30.921479Z
+# User@Host: root[root] @ localhost [::1]  Id:   241
+# Query_time: 0.000774  Lock_time: 0.000512 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606948290;
+SELECT
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN concat("formularios/empaque.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN concat("formularios/flujologistica.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN concat("formularios/ordentrabajo.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0)THEN "Gestión Logística"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN "Documentos de Empaque"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN "Flujos de Producto"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN "Ordenes de Trabajo"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN "Almacenamiento"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN "Picking"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN "icon-box-remove"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 9
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 22
+           ELSE NULL
+           END AS idSegModulo,DES.*
+          FROM viewDocumentoEmpaqueSeguridad DES
+          WHERE DES.id=1;
+# Time: 2020-12-02T22:31:31.201381Z
+# User@Host: root[root] @ localhost [::1]  Id:   249
+# Query_time: 0.000962  Lock_time: 0.000661 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1606948291;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-02T22:31:49.266044Z
+# User@Host: root[root] @ localhost [::1]  Id:   261
+# Query_time: 0.000240  Lock_time: 0.000074 Rows_sent: 1  Rows_examined: 1
+SET timestamp=1606948309;
+SELECT * FROM SegLogin WHERE usuarioLogin = 'aintegral' AND active=1 LIMIT 1;
+# Time: 2020-12-02T22:31:49.395320Z
+# User@Host: root[root] @ localhost [::1]  Id:   262
+# Query_time: 0.002751  Lock_time: 0.000159 Rows_sent: 1  Rows_examined: 414
+SET timestamp=1606948309;
+SELECT * FROM Tercero WHERE `tipoTercero` LIKE '%*17*%';
+# Time: 2020-12-02T22:31:49.397817Z
+# User@Host: root[root] @ localhost [::1]  Id:   263
+# Query_time: 0.000143  Lock_time: 0.000099 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606948309;
+SELECT idUsuario,modulos FROM SoporteMail where idUsuario=1;
+# Time: 2020-12-02T22:31:49.398612Z
+# User@Host: root[root] @ localhost [::1]  Id:   263
+# Query_time: 0.000329  Lock_time: 0.000214 Rows_sent: 2  Rows_examined: 6
+SET timestamp=1606948309;
+select idAlerta,idAlertaUsuario,
+               estadoAlerta,
+               procesoAlerta,
+               descripcionAlerta  from Alerta, AlertaUsuario  WHERE estadoAlerta = 1 and Usuario_idUsuario = 1 and Alerta_idAlerta = idAlerta and estadoAlertaUsuario = 1  order by descripcionAlerta;
+# Time: 2020-12-02T22:31:49.406929Z
+# User@Host: root[root] @ localhost [::1]  Id:   263
+# Query_time: 0.001300  Lock_time: 0.000736 Rows_sent: 4  Rows_examined: 19
+SET timestamp=1606948309;
+SELECT
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN concat("formularios/movimientoCRM.grid.php?iddocumentocrm=",idDocumentoCRM)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Gestión CRM"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Documentos CRM"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "icon-users"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 3
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 9
+           ELSE NULL
+           END AS idSegModulo, DCR.*
+           from viewDocumentoCRMSeguridad DCR where id=1;
+# Time: 2020-12-02T22:31:49.408193Z
+# User@Host: root[root] @ localhost [::1]  Id:   263
+# Query_time: 0.001143  Lock_time: 0.000836 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1606948309;
+SELECT
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN concat("formularios/empaque.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN concat("formularios/flujologistica.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN concat("formularios/ordentrabajo.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0)THEN "Gestión Logística"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN "Documentos de Empaque"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN "Flujos de Producto"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN "Ordenes de Trabajo"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN "Almacenamiento"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN "Picking"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN "icon-box-remove"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 9
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 22
+           ELSE NULL
+           END AS idSegModulo,DES.*
+          FROM viewDocumentoEmpaqueSeguridad DES
+          WHERE DES.id=1;
+# Time: 2020-12-02T22:31:49.670477Z
+# User@Host: root[root] @ localhost [::1]  Id:   271
+# Query_time: 0.000597  Lock_time: 0.000381 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1606948309;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:40:03.567209Z
+# User@Host: root[root] @ localhost [::1]  Id:   390
+# Query_time: 0.000882  Lock_time: 0.000486 Rows_sent: 1  Rows_examined: 1
+SET timestamp=1607017203;
+SELECT * FROM SegLogin WHERE usuarioLogin = 'aintegral' AND active=1 LIMIT 1;
+# Time: 2020-12-03T17:40:03.719214Z
+# User@Host: root[root] @ localhost [::1]  Id:   391
+# Query_time: 0.004718  Lock_time: 0.000684 Rows_sent: 1  Rows_examined: 414
+SET timestamp=1607017203;
+SELECT * FROM Tercero WHERE `tipoTercero` LIKE '%*17*%';
+# Time: 2020-12-03T17:40:03.722102Z
+# User@Host: root[root] @ localhost [::1]  Id:   392
+# Query_time: 0.000192  Lock_time: 0.000130 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1607017203;
+SELECT idUsuario,modulos FROM SoporteMail where idUsuario=1;
+# Time: 2020-12-03T17:40:03.725168Z
+# User@Host: root[root] @ localhost [::1]  Id:   392
+# Query_time: 0.001103  Lock_time: 0.000451 Rows_sent: 2  Rows_examined: 6
+SET timestamp=1607017203;
+select idAlerta,idAlertaUsuario,
+               estadoAlerta,
+               procesoAlerta,
+               descripcionAlerta  from Alerta, AlertaUsuario  WHERE estadoAlerta = 1 and Usuario_idUsuario = 1 and Alerta_idAlerta = idAlerta and estadoAlertaUsuario = 1  order by descripcionAlerta;
+# Time: 2020-12-03T17:40:03.739474Z
+# User@Host: root[root] @ localhost [::1]  Id:   392
+# Query_time: 0.001284  Lock_time: 0.000885 Rows_sent: 4  Rows_examined: 19
+SET timestamp=1607017203;
+SELECT
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN concat("formularios/movimientoCRM.grid.php?iddocumentocrm=",idDocumentoCRM)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Gestión CRM"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Documentos CRM"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "icon-users"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 3
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 9
+           ELSE NULL
+           END AS idSegModulo, DCR.*
+           from viewDocumentoCRMSeguridad DCR where id=1;
+# Time: 2020-12-03T17:40:03.741127Z
+# User@Host: root[root] @ localhost [::1]  Id:   392
+# Query_time: 0.001537  Lock_time: 0.001153 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1607017203;
+SELECT
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN concat("formularios/empaque.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN concat("formularios/flujologistica.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN concat("formularios/ordentrabajo.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0)THEN "Gestión Logística"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN "Documentos de Empaque"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN "Flujos de Producto"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN "Ordenes de Trabajo"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN "Almacenamiento"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN "Picking"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN "icon-box-remove"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 9
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 22
+           ELSE NULL
+           END AS idSegModulo,DES.*
+          FROM viewDocumentoEmpaqueSeguridad DES
+          WHERE DES.id=1;
+# Time: 2020-12-03T17:40:04.120240Z
+# User@Host: root[root] @ localhost [::1]  Id:   401
+# Query_time: 0.001609  Lock_time: 0.001053 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607017204;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:49:07.084394Z
+# User@Host: root[root] @ localhost [::1]  Id:   411
+# Query_time: 0.003187  Lock_time: 0.000428 Rows_sent: 1  Rows_examined: 414
+SET timestamp=1607017747;
+SELECT * FROM Tercero WHERE `tipoTercero` LIKE '%*17*%';
+# Time: 2020-12-03T17:49:07.087206Z
+# User@Host: root[root] @ localhost [::1]  Id:   412
+# Query_time: 0.000160  Lock_time: 0.000109 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1607017747;
+SELECT idUsuario,modulos FROM SoporteMail where idUsuario=1;
+# Time: 2020-12-03T17:49:07.088694Z
+# User@Host: root[root] @ localhost [::1]  Id:   412
+# Query_time: 0.000397  Lock_time: 0.000233 Rows_sent: 2  Rows_examined: 6
+SET timestamp=1607017747;
+select idAlerta,idAlertaUsuario,
+               estadoAlerta,
+               procesoAlerta,
+               descripcionAlerta  from Alerta, AlertaUsuario  WHERE estadoAlerta = 1 and Usuario_idUsuario = 1 and Alerta_idAlerta = idAlerta and estadoAlertaUsuario = 1  order by descripcionAlerta;
+# Time: 2020-12-03T17:49:07.099930Z
+# User@Host: root[root] @ localhost [::1]  Id:   412
+# Query_time: 0.001079  Lock_time: 0.000668 Rows_sent: 4  Rows_examined: 19
+SET timestamp=1607017747;
+SELECT
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN concat("formularios/movimientoCRM.grid.php?iddocumentocrm=",idDocumentoCRM)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Gestión CRM"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "Documentos CRM"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN "icon-users"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 3
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoCRM > 0)THEN 9
+           ELSE NULL
+           END AS idSegModulo, DCR.*
+           from viewDocumentoCRMSeguridad DCR where id=1;
+# Time: 2020-12-03T17:49:07.101345Z
+# User@Host: root[root] @ localhost [::1]  Id:   412
+# Query_time: 0.001320  Lock_time: 0.001015 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1607017747;
+SELECT
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN concat("formularios/empaque.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN concat("formularios/flujologistica.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN concat("formularios/ordentrabajo.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN concat("formularios/almacenamiento.grid.php?iddocumentoempaque=",idDocumentoEmpaque)
+           ELSE NULL
+           END AS nombreSegOpcion,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0)THEN "Gestión Logística"
+           ELSE NULL
+           END AS nombreSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "EMP") THEN "Documentos de Empaque"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "FLU") THEN "Flujos de Producto"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ORD") THEN "Ordenes de Trabajo"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "ALM") THEN "Almacenamiento"
+           WHEN (idDocumentoEmpaqueRol > 0 and tipoDocumentoEmpaque = "PIC") THEN "Picking"
+           ELSE NULL
+           END AS nombreSegModulo,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN "icon-box-remove"
+           ELSE NULL
+           END AS claseSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 9
+           ELSE NULL
+           END AS idSegPaquete,
+           CASE
+           WHEN (idDocumentoEmpaqueRol > 0) THEN 22
+           ELSE NULL
+           END AS idSegModulo,DES.*
+          FROM viewDocumentoEmpaqueSeguridad DES
+          WHERE DES.id=1;
+# Time: 2020-12-03T17:49:07.425197Z
+# User@Host: root[root] @ localhost [::1]  Id:   420
+# Query_time: 0.001217  Lock_time: 0.000857 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607017747;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:50:07.493828Z
+# User@Host: root[root] @ localhost [::1]  Id:   426
+# Query_time: 0.001165  Lock_time: 0.000454 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607017807;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:51:07.550673Z
+# User@Host: root[root] @ localhost [::1]  Id:   432
+# Query_time: 0.000990  Lock_time: 0.000660 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607017867;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:52:07.610093Z
+# User@Host: root[root] @ localhost [::1]  Id:   438
+# Query_time: 0.000719  Lock_time: 0.000474 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607017927;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:53:07.667376Z
+# User@Host: root[root] @ localhost [::1]  Id:   444
+# Query_time: 0.000496  Lock_time: 0.000281 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607017987;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:54:07.730251Z
+# User@Host: root[root] @ localhost [::1]  Id:   450
+# Query_time: 0.001423  Lock_time: 0.000917 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607018047;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:55:07.783277Z
+# User@Host: root[root] @ localhost [::1]  Id:   456
+# Query_time: 0.000529  Lock_time: 0.000298 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607018107;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:56:07.842540Z
+# User@Host: root[root] @ localhost [::1]  Id:   463
+# Query_time: 0.000460  Lock_time: 0.000213 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607018167;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:57:07.903064Z
+# User@Host: root[root] @ localhost [::1]  Id:   470
+# Query_time: 0.000377  Lock_time: 0.000168 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607018227;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
+# Time: 2020-12-03T17:58:07.934615Z
+# User@Host: root[root] @ localhost [::1]  Id:   478
+# Query_time: 0.000582  Lock_time: 0.000375 Rows_sent: 0  Rows_examined: 6
+SET timestamp=1607018287;
+SELECT
+			A.idAlerta,
+			A.estadoAlerta,
+			A.codigoAlternoAlerta,
+			A.nombreAlerta,
+			A.procesoAlerta,
+			A.descripcionAlerta,
+			SL.nombreLogin,
+			SL.id as idusuario,
+			SL.emailLogin,
+			AUS.inicioMail,
+			AUS.lunes,
+			AUS.martes,
+			AUS.miercoles,
+			AUS.jueves,
+			AUS.viernes,
+			AUS.sabado,
+			AUS.domingo,
+			AUS.sincronizar,
+			AUS.timeStamp,
+			now() as fecha,
+			(ELT(WEEKDAY(curdate()) + 1, if(AUS.lunes = 1,'SI','NO'), if(AUS.martes = 1,'SI','NO'), if(AUS.miercoles = 1,'SI','NO'), if(AUS.jueves = 1,'SI','NO'), if(AUS.viernes = 1,'SI','NO'), if(AUS.sabado = 1,'SI','NO'), if(AUS.domingo = 1,'SI','NO'))) AS enviarCorreo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) MOD if(AUS.sincronizar < 1,(AUS.sincronizar * 100),(AUS.sincronizar * 60))  as multiplo,
+			 (TIMESTAMPDIFF(MINUTE , TIMESTAMP(AUS.timeStamp) , now() )) as minutos
+			FROM Alerta A
+			left join AlertaUsuario AU on AU.Alerta_idAlerta = A.idAlerta
+			left join AlertaUsuarioSincronizacion AUS on AUS.AlertaUsuario_idAlertaUsuario = AU.idAlertaUsuario
+			left join SegLogin SL on SL.id = Usuario_idUsuario
+			where A.estadoAlerta = 1 and AU.estadoAlertaUsuario = 1 and SL.id = 1
+			having sincronizar != '0.00' and  minutos > 0 and multiplo = 0;
