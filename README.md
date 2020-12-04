@@ -1,4 +1,4 @@
-# PHPFUI\MySQLSlowLog\Parser
+# PHPFUI\MySQLSlowLog\Parser [![Latest Packagist release](https://img.shields.io/packagist/v/phpfui/mysql-slow-log-parser.svg)](https://packagist.org/packages/phpfui/mysql-slow-log-parser)
 
 PHP Parser for MySQL Slow Query Logs
 
