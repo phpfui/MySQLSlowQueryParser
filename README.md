@@ -53,7 +53,7 @@ Supported fields:
 By default, entries are returned in log order, but call sortEntries on the Parser to sort by any valid field (parameter 1). Sort defaults to 'desc', anything else will sort ascending.
 
 ## Full Class Documentation
-Via [PHPFUI/InstaDoc](http://phpfui.com/?n=PHPFUI%5CMySQLSlowLog)
+Via [PHPFUI/InstaDoc](http://phpfui.com/?n=PHPFUI%5CMySQLSlowQuery)
 
 ## License
 Distributed under the MIT License.
