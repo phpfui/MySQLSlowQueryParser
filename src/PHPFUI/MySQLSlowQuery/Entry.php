@@ -32,7 +32,7 @@ class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 		{
 		if (strpos($line, '# '))
 			{
-			throw new Exception('Not a valid Slow log line: ' . $line);
+			throw new LogLineException('Not a valid Slow log line: ' . $line);
 			}
 
 		$line = trim($line);

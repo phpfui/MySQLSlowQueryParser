@@ -1,0 +1,35 @@
+- Wampserver trace report -
+File created by Wampserver install
+2020-09-29T22:30:17.233704Z 0 [Warning] InnoDB: Resizing redo log from 2*3072 to 2*16384 pages, LSN=2720012
+2020-09-29T22:30:17.349325Z 0 [Warning] InnoDB: Starting to delete and rewrite log files.
+ 100 200
+ 100 200
+2020-09-29T22:30:18.032586Z 0 [Warning] InnoDB: New log files created, LSN=2720012
+2020-09-29T23:13:12.208698Z 0 [Warning] wampmysqld64: Forcing close of thread 2  user: 'root'
+
+2020-09-29T23:13:12.209731Z 0 [Warning] wampmysqld64: Forcing close of thread 3  user: 'root'
+
+2020-09-29T23:13:12.210560Z 0 [Warning] wampmysqld64: Forcing close of thread 11  user: 'root'
+
+2020-09-29T23:13:12.211417Z 0 [Warning] wampmysqld64: Forcing close of thread 19  user: 'root'
+
+2020-09-29T23:13:12.212679Z 0 [Warning] wampmysqld64: Forcing close of thread 21  user: 'root'
+
+2020-09-29T23:13:12.213043Z 0 [Warning] wampmysqld64: Forcing close of thread 10  user: 'root'
+
+2020-09-29T23:13:12.213376Z 0 [Warning] wampmysqld64: Forcing close of thread 20  user: 'root'
+
+2020-09-29T23:19:17.932089Z 0 [Warning] wampmysqld64: Forcing close of thread 4  user: 'root'
+
+2020-09-29T23:19:17.932766Z 0 [Warning] wampmysqld64: Forcing close of thread 11  user: 'root'
+
+2020-09-29T23:19:17.933269Z 0 [Warning] wampmysqld64: Forcing close of thread 3  user: 'root'
+
+2020-09-29T23:19:17.933899Z 0 [Warning] wampmysqld64: Forcing close of thread 10  user: 'root'
+
+2020-12-04T00:25:16.494116Z 0 [Warning] wampmysqld64: Forcing close of thread 126634  user: 'root'
+
+2020-12-04T00:25:16.495529Z 0 [Warning] wampmysqld64: Forcing close of thread 126621  user: 'root'
+
+2020-12-04T00:25:16.495894Z 0 [Warning] wampmysqld64: Forcing close of thread 126620  user: 'root'
+

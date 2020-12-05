@@ -13,6 +13,8 @@ class Parser
 	private $handle;
 	private $inSession = true;
 	private $sessions = [];
+	private $sortColumn = 'Query_time';
+	private $sortOrder = 'desc';
 
 	/**
 	 * Parse a MySQL Slow Query Log file
@@ -65,6 +67,36 @@ class Parser
 		return $this->sessions;
 		}
 
+	/**
+	 * Sort \PHPFUI\MySQLSlowQuery\Entry entries.  Defaults to Query_time, desc
+	 */
+	public function sortEntries(string $sortColumn = 'Query_time', string $sortOrder = 'desc') : self
+		{
+		$this->sortColumn = $sortColumn;
+		$this->sortOrder = $sortOrder;
+
+		if (! $this->entries)
+			{
+			$this->parse();
+			}
+
+		usort($this->entries, [$this, 'entrySort']);
+
+		return $this;
+		}
+
+	protected function entrySort(\PHPFUI\MySQLSlowQuery\Entry $lhs, \PHPFUI\MySQLSlowQuery\Entry $rhs) : int
+		{
+		$column = $this->sortColumn;
+
+		if ('desc' == $this->sortOrder)
+			{
+			return $rhs->{$column} <=> $lhs->{$column};
+			}
+
+		return $lhs->{$column} <=> $rhs->{$column};
+		}
+
 	private function getNextLine()
 		{
 		if ($this->extraLines)
@@ -83,7 +115,7 @@ class Parser
 
 		if (! $this->handle)
 			{
-			throw new Exception(__CLASS__ . ': ' . $this->fileName . ' appears to not exist or is empty');
+			throw new EmptyLogException(__CLASS__ . ': ' . $this->fileName . ' appears to not exist or is empty');
 			}
 
 		$currentSession = [];
@@ -147,6 +179,13 @@ class Parser
 			}
 
 		fclose($this->handle);
+
+		if (! count($this->sessions) && ! count($this->entries))
+			{
+			echo "\nno entries\n";
+
+			throw new InvalidLogException(__CLASS__ . ': ' . $this->fileName . ' appears to not to be a valid MySQL Slow Query Log file');
+			}
 		}
 
 	private function pushLine(string $line) : self

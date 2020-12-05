@@ -12,6 +12,13 @@
 class UnitTest extends \PHPUnit\Framework\TestCase
 	{
 
+	public function testBadFile() : void
+		{
+		$this->expectException(\PHPFUI\MySQLSlowQuery\InvalidLogException::class);
+		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/mysql.log');
+		$sessions = $parser->getSessions();
+		}
+
 	public function testDoubleSession() : void
 		{
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/doubleSession.log');
@@ -21,6 +28,27 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals('c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL)', $session->Server);
 		$this->assertEquals('TCP Port: 3388', $session->Port);
 		$this->assertEquals('Named Pipe: /tmp/mysql.sock', $session->Transport);
+		}
+
+	public function testInvalidGet() : void
+		{
+		$this->expectException(\PHPFUI\MySQLSlowQuery\GetException::class);
+		$entry = new \PHPFUI\MySQLSlowQuery\Entry();
+		$ethyl = $entry->fred;
+		}
+
+	public function testInvalidSet() : void
+		{
+		$this->expectException(\PHPFUI\MySQLSlowQuery\SetException::class);
+		$entry = new \PHPFUI\MySQLSlowQuery\Entry();
+		$entry->fred = 'Ethyl';
+		}
+
+	public function testMissingFile() : void
+		{
+		$this->expectException(\PHPFUI\MySQLSlowQuery\EmptyLogException::class);
+		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/missing.log');
+		$sessions = $parser->getSessions();
 		}
 
 	public function testSingleSession() : void
@@ -48,6 +76,21 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 
 		$this->assertEquals('SET timestamp=1606939504;', $entry->Query[0]);
 		$this->assertEquals("SELECT * FROM Tercero WHERE `tipoTercero` LIKE '%*17*%';", $entry->Query[1]);
+		}
+
+	public function testSortedEntries() : void
+		{
+		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/singleSession.log');
+		$entries = $parser->sortEntries()->getEntries();
+		$this->assertCount(61, $entries);
+		$entry = $entries[0];
+		$this->assertEquals('2020-12-02T20:05:00.650946Z', $entry->Time);
+		$this->assertEquals('14', $entry->Id);
+		$this->assertEquals('0.062181', $entry->Query_time);
+		$this->assertEquals('0.001285', $entry->Lock_time);
+		$this->assertEquals('1', $entry->Rows_sent);
+		$this->assertEquals('414', $entry->Rows_examined);
+		$this->assertCount(2, $entry->Query);
 		}
 
 	public function testTripleSession() : void

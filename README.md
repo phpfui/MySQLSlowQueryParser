@@ -1,23 +1,36 @@
-# PHPFUI\MySQLSlowLog\Parser [![Latest Packagist release](https://img.shields.io/packagist/v/phpfui/mysql-slow-log-parser.svg)](https://packagist.org/packages/phpfui/mysql-slow-log-parser)
+# PHPFUI\MySQLSlowLog\Parser [![Build Status](https://travis-ci.org/phpfui/MySQLSlowQueryParser.png?branch=master)](https://travis-ci.org/phpfui/MySQLSlowQueryParser) [![Latest Packagist release](https://img.shields.io/packagist/v/phpfui/mysql-slow-log-parser.svg)](https://packagist.org/packages/phpfui/mysql-slow-log-parser)
 
 PHP Parser for MySQL Slow Query Logs
 
 ## Requirements
-PHP 7.1 or higher
-MySQL 5.7 or higher
+ * PHP 7.1 or higher
+ * MySQL 5.7 or higher
 
 ## Usage
 ~~~php
 $parser = new \PHPFUI\MySQLSlowQuery\Parser($logFilePath);
-// Return the sessions in the file
+
+// Return the sessions in the file as array
 $sessions = $parser->getSessions();
-// Return all entries in file, or pass session number (0 based)
+
+// Return all entries in file as array, or pass session number (0 based)
 $entries = $parser->getEntries();
+
+if (count($entries))
+  {
+  // Get the worst offender
+  $entry = $parser->sortEntries()->getEntries()[0];
+  echo 'Query ' . implode(' ', $entry->Query) . " took {$entry->Query_time} seconds at {$entry->Time}\n";
+
+  // Get the most rows examined
+  $entry = $parser->sortEntries('Rows_examined', 'desc')->getEntries()[0];
+  echo 'Query ' . implode(' ', $entry->Query) . " looked at {$entry->Rows_examined} rows\n";
+  }
 ~~~
 
-**\PHPFUI\MySQLSlowQuery\Session** provides server information (Server, Port, Transport). Sessions are created on MySQL server restarts and log flushes.
-
-**\PHPFUI\MySQLSlowQuery\Entry** provides details on each query.  Supported fields:
+## Entries
+**\PHPFUI\MySQLSlowQuery\Entry** provides details on each query.
+Supported fields:
  * Time
  * User
  * Host
@@ -27,9 +40,19 @@ $entries = $parser->getEntries();
  * Rows_sent
  * Rows_examined
  * Query (array)
- * Session
+ * Session (zero based)
 
-## Documentation
+## Sessions
+**\PHPFUI\MySQLSlowQuery\Session** contains MySQL server information and are created on server restarts and log flushes. Pass the zero based session number to getEntries for only that Session's entries.
+Supported fields:
+ * Server
+ * Port
+ * Transport
+
+## Sort Entries
+By default, entries are returned in log order, but call sortEntries on the Parser to sort by any valid field (parameter 1). Sort defaults to 'desc', anything else will sort ascending.
+
+## Full Class Documentation
 Via [PHPFUI/InstaDoc](http://phpfui.com/?n=PHPFUI%5CMySQLSlowLog)
 
 ## License

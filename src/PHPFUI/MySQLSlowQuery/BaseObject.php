@@ -16,7 +16,7 @@ abstract class BaseObject
 		{
 		if (! array_key_exists($field, $this->fields))
 			{
-			throw new Exception("{$field} is not a valid field for " . get_class($this));
+			throw new GetException("{$field} is not a valid field for " . get_class($this));
 			}
 
 		return $this->fields[$field];
@@ -31,7 +31,7 @@ abstract class BaseObject
 		{
 		if (! array_key_exists($field, $this->fields))
 			{
-			throw new Exception("{$field} is not a valid field for " . get_class($this));
+			throw new SetException("{$field} is not a valid field for " . get_class($this));
 			}
 
 		$this->fields[$field] = $value;
