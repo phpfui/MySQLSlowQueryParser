@@ -1,6 +1,6 @@
 {
     "name": "phpfui/mysql-slow-log-parser",
-    "description": "MySQL Slow Query Log Parser",
+    "description": "MySQL Slow Query Log Parser featuring sortable results"
     "minimum-stability": "stable",
     "keywords": ["MySQL", "slow", "query", "log", "parser"],
     "homepage": "http://www.phpfui.com",

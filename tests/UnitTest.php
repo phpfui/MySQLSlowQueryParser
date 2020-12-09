@@ -16,9 +16,9 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 
 	public function testBadFile() : void
 		{
-		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\InvalidLog::class);
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/mysql.log');
-		$parser->getSessions();
+		$this->assertCount(0, $parser->getSessions());
+		$this->assertCount(0, $parser->getEntries());
 		}
 
 	public function testDoubleSession() : void

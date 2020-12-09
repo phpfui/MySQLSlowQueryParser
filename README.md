@@ -1,6 +1,6 @@
-# PHPFUI\MySQLSlowLog\Parser [![Build Status](https://travis-ci.org/phpfui/MySQLSlowQueryParser.png?branch=master)](https://travis-ci.org/phpfui/MySQLSlowQueryParser) [![Latest Packagist release](https://img.shields.io/packagist/v/phpfui/mysql-slow-log-parser.svg)](https://packagist.org/packages/phpfui/mysql-slow-log-parser)
+# PHPFUI\MySQLSlowLog\Parser [![Tests](https://github.com/phpfui/MySQLSlowQueryParser/workflows/build/badge.svg)](https://github.com/phpfui/MySQLSlowQueryParser/actions?query=workflow%3Abuild) [![Latest Packagist release](https://img.shields.io/packagist/v/phpfui/mysql-slow-log-parser.svg)](https://packagist.org/packages/phpfui/mysql-slow-log-parser)
 
-PHP Parser for MySQL Slow Query Logs
+PHP Parser for MySQL Slow Query Logs featuring sortable results
 
 ## Requirements
  * PHP 7.1 or higher

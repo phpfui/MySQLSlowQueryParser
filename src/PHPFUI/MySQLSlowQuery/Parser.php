@@ -28,6 +28,9 @@ class Parser
 	 * Return \PHPFUI\MySQLSlowQuery\Entry entries from file
 	 *
 	 * @param int $session return entries from the specified session
+	 *
+	 * @throws Exception\EmptyLog
+	 * @throws Exception\LogLine
 	 */
 	public function getEntries(int $session = -1) : array
 		{
@@ -56,6 +59,9 @@ class Parser
 
 	/**
 	 * Return \PHPFUI\MySQLSlowQuery\Session sessions from file
+	 *
+	 * @throws Exception\EmptyLog
+	 * @throws Exception\LogLine
 	 */
 	public function getSessions() : array
 		{
@@ -69,6 +75,9 @@ class Parser
 
 	/**
 	 * Sort \PHPFUI\MySQLSlowQuery\Entry entries.  Defaults to Query_time, desc
+	 *
+	 * @throws Exception\EmptyLog
+	 * @throws Exception\LogLine
 	 */
 	public function sortEntries(string $sortColumn = 'Query_time', string $sortOrder = 'desc') : self
 		{
@@ -179,13 +188,6 @@ class Parser
 			}
 
 		fclose($this->handle);
-
-		if (! count($this->sessions) && ! count($this->entries))
-			{
-			echo "\nno entries\n";
-
-			throw new Exception\InvalidLog(__CLASS__ . ': ' . $this->fileName . ' appears to not to be a valid MySQL Slow Query Log file');
-			}
 		}
 
 	private function pushLine(string $line) : self
