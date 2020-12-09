@@ -1,5 +1,7 @@
 <?php
 
+namespace PHPFUI\Tests;
+
 /**
  * This file is part of the PHPFUI package
  *

@@ -19,6 +19,9 @@
         "phpfui/phpunit-syntax-coverage": "^1.0"
     },
     "autoload": {
-        "psr-0": {"PHPFUI\\": "src/"}
+        "psr-4": {"PHPFUI\\": "src/PHPFUI"}
+    },
+    "autoload-dev": {
+        "psr-4": {"PHPFUI\\Tests\\": "tests"}
     }
 }
