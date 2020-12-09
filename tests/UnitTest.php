@@ -14,7 +14,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 
 	public function testBadFile() : void
 		{
-		$this->expectException(\PHPFUI\MySQLSlowQuery\InvalidLogException::class);
+		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\InvalidLog::class);
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/mysql.log');
 		$sessions = $parser->getSessions();
 		}
@@ -32,21 +32,21 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 
 	public function testInvalidGet() : void
 		{
-		$this->expectException(\PHPFUI\MySQLSlowQuery\GetException::class);
+		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\Get::class);
 		$entry = new \PHPFUI\MySQLSlowQuery\Entry();
 		$ethyl = $entry->fred;
 		}
 
 	public function testInvalidSet() : void
 		{
-		$this->expectException(\PHPFUI\MySQLSlowQuery\SetException::class);
+		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\Set::class);
 		$entry = new \PHPFUI\MySQLSlowQuery\Entry();
 		$entry->fred = 'Ethyl';
 		}
 
 	public function testMissingFile() : void
 		{
-		$this->expectException(\PHPFUI\MySQLSlowQuery\EmptyLogException::class);
+		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\EmptyLog::class);
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/missing.log');
 		$sessions = $parser->getSessions();
 		}

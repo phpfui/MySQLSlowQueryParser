@@ -115,7 +115,7 @@ class Parser
 
 		if (! $this->handle)
 			{
-			throw new EmptyLogException(__CLASS__ . ': ' . $this->fileName . ' appears to not exist or is empty');
+			throw new Exception\EmptyLog(__CLASS__ . ': ' . $this->fileName . ' appears to not exist or is empty');
 			}
 
 		$currentSession = [];
@@ -184,7 +184,7 @@ class Parser
 			{
 			echo "\nno entries\n";
 
-			throw new InvalidLogException(__CLASS__ . ': ' . $this->fileName . ' appears to not to be a valid MySQL Slow Query Log file');
+			throw new Exception\InvalidLog(__CLASS__ . ': ' . $this->fileName . ' appears to not to be a valid MySQL Slow Query Log file');
 			}
 		}
 

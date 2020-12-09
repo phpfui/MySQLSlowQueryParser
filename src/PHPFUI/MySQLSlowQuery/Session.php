@@ -13,8 +13,11 @@ class Session extends \PHPFUI\MySQLSlowQuery\BaseObject
 			'Transport' => '',
 			];
 
-		$this->Server = trim(str_replace('. started with:', '', $sessionData[0]));
-		[$this->Port, $this->Transport] = explode(', ', trim($sessionData[1]));
+		$this->Server = trim(str_replace('. started with:', '', $sessionData[0] ?? 'unknown'));
+		if (strpos($sessionData[1] ?? '', ', '))
+			{
+			[$this->Port, $this->Transport] = explode(', ', trim($sessionData[1]));
+			}
 		}
 
 	}
