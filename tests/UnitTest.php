@@ -1,5 +1,7 @@
 <?php
 
+namespace PHPFUI\Tests;
+
 /**
  * This file is part of the PHPFUI package
  *
@@ -16,7 +18,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		{
 		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\InvalidLog::class);
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/mysql.log');
-		$sessions = $parser->getSessions();
+		$parser->getSessions();
 		}
 
 	public function testDoubleSession() : void
@@ -34,7 +36,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		{
 		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\Get::class);
 		$entry = new \PHPFUI\MySQLSlowQuery\Entry();
-		$ethyl = $entry->fred;
+		$entry->fred;
 		}
 
 	public function testInvalidSet() : void
@@ -48,7 +50,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		{
 		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\EmptyLog::class);
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/missing.log');
-		$sessions = $parser->getSessions();
+		$parser->getSessions();
 		}
 
 	public function testSingleSession() : void
