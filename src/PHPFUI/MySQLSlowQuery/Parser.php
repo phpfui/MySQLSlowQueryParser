@@ -5,15 +5,23 @@ namespace PHPFUI\MySQLSlowQuery;
 class Parser
 	{
 	private const PORT = 'TCP Port: ';
+
 	private const TIME = '# Time: ';
+
 	private $entries = [];
+
 	private $extraLines = [];
 
 	private $fileName = '';
+
 	private $handle;
+
 	private $inSession = true;
+
 	private $sessions = [];
+
 	private $sortColumn = 'Query_time';
+
 	private $sortOrder = 'desc';
 
 	/**
@@ -89,7 +97,7 @@ class Parser
 			$this->parse();
 			}
 
-		usort($this->entries, [$this, 'entrySort']);
+		\usort($this->entries, [$this, 'entrySort']);
 
 		return $this;
 		}
@@ -110,17 +118,17 @@ class Parser
 		{
 		if ($this->extraLines)
 			{
-			return array_shift($this->extraLines);
+			return \array_shift($this->extraLines);
 			}
 
-		$line = fgets($this->handle);
+		$line = \fgets($this->handle);
 
 		return $line;
 		}
 
 	private function parse() : void
 		{
-		$this->handle = @fopen($this->fileName, 'r');
+		$this->handle = @\fopen($this->fileName, 'r');
 
 		if (! $this->handle)
 			{
@@ -129,9 +137,9 @@ class Parser
 
 		$currentSession = [];
 
-		while (strlen($line = $this->getNextLine()))
+		while (\strlen($line = $this->getNextLine()))
 			{
-			if (0 === strpos($line, self::PORT))	// in middle of session, end it
+			if (0 === \strpos($line, self::PORT))	// in middle of session, end it
 				{
 				$currentSession[] = $line;
 				// eat the next line
@@ -145,25 +153,25 @@ class Parser
 				{
 				$currentSession[] = $line;
 				}
-			elseif (0 === strpos($line, self::TIME))	// start of log entry
+			elseif (0 === \strpos($line, self::TIME))	// start of log entry
 				{
 				$entry = new \PHPFUI\MySQLSlowQuery\Entry();
 				// parse the next three lines
 				$entry->setFromLine($line);
-				$entry->setFromLine(fgets($this->handle));
-				$entry->setFromLine(fgets($this->handle));
+				$entry->setFromLine(\fgets($this->handle));
+				$entry->setFromLine(\fgets($this->handle));
 
 				$query = [];
 
-				while (strlen($line = $this->getNextLine()) && '#' !== $line[0])
+				while (\strlen($line = $this->getNextLine()) && '#' !== $line[0])
 					{
-					if (0 === strpos($line, self::PORT))	// found a session
+					if (0 === \strpos($line, self::PORT))	// found a session
 						{
 						$this->pushLine($line);
 						// push this and previous line back on to stack
-						if (count($query))
+						if (\count($query))
 							{
-							$this->pushLine(array_pop($query));
+							$this->pushLine(\array_pop($query));
 							}
 						$line = '';
 						$currentSession = [];
@@ -171,30 +179,29 @@ class Parser
 
 						break;
 						}
-					else
-						{
-						$query[] = trim($line);
-						}
+
+
+						$query[] = \trim($line);
+
 					}
 
-				if (strlen($line) && '#' === $line[0])
+				if (\strlen($line) && '#' === $line[0])
 					{
 					$this->pushLine($line);
 					}
 				$entry->Query = $query;
-				$entry->Session = count($this->sessions) - 1;
+				$entry->Session = \count($this->sessions) - 1;
 				$this->entries[] = $entry;
 				}
 			}
 
-		fclose($this->handle);
+		\fclose($this->handle);
 		}
 
 	private function pushLine(string $line) : self
 		{
-		array_unshift($this->extraLines, $line);
+		\array_unshift($this->extraLines, $line);
 
 		return $this;
 		}
-
 	}

@@ -4,7 +4,6 @@ namespace PHPFUI\MySQLSlowQuery;
 
 abstract class BaseObject
 	{
-
 	protected $fields = [];
 
 	abstract public function __construct(array $paramters = []);
@@ -14,9 +13,9 @@ abstract class BaseObject
 	 */
 	public function __get(string $field)
 		{
-		if (! array_key_exists($field, $this->fields))
+		if (! \array_key_exists($field, $this->fields))
 			{
-			throw new Exception\Get("{$field} is not a valid field for " . get_class($this));
+			throw new Exception\Get("{$field} is not a valid field for " . \get_class($this));
 			}
 
 		return $this->fields[$field];
@@ -29,9 +28,9 @@ abstract class BaseObject
 	 */
 	public function __set(string $field, $value)
 		{
-		if (! array_key_exists($field, $this->fields))
+		if (! \array_key_exists($field, $this->fields))
 			{
-			throw new Exception\Set("{$field} is not a valid field for " . get_class($this));
+			throw new Exception\Set("{$field} is not a valid field for " . \get_class($this));
 			}
 
 		$this->fields[$field] = $value;
@@ -43,5 +42,4 @@ abstract class BaseObject
 		{
 		return $this->fields;
 		}
-
 	}
