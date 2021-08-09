@@ -13,7 +13,6 @@ namespace PHPFUI\Tests;
  */
 class UnitTest extends \PHPUnit\Framework\TestCase
 	{
-
 	public function testBadFile() : void
 		{
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/mysql.log');
@@ -28,7 +27,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertCount(2, $sessions);
 		$session = $sessions[1];
 		$this->assertEquals('c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL)', $session->Server);
-		$this->assertEquals('TCP Port: 3388', $session->Port);
+		$this->assertEqualsIgnoringCase('TCP Port: 3388', $session->Port);
 		$this->assertEquals('Named Pipe: /tmp/mysql.sock', $session->Transport);
 		}
 
@@ -60,7 +59,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertCount(1, $sessions);
 		$session = $sessions[0];
 		$this->assertEquals('c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL)', $session->Server);
-		$this->assertEquals('TCP Port: 3306', $session->Port);
+		$this->assertEqualsIgnoringCase('TCP Port: 3306', $session->Port);
 		$this->assertEquals('Named Pipe: /tmp/mysql.sock', $session->Transport);
 
 		$entries = $parser->getEntries();
@@ -105,7 +104,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 			{
 			$session = $sessions[$i];
 			$port = ($i + 1) * 1111;
-			$this->assertEquals("TCP Port: {$port}", $session->Port);
+			$this->assertEqualsIgnoringCase("TCP Port: {$port}", $session->Port);
 			}
 		$entries = $parser->getEntries(2);
 		$this->assertCount(1, $entries);
@@ -119,5 +118,4 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals('0', $entry->Rows_sent);
 		$this->assertEquals('6', $entry->Rows_examined);
 		}
-
 	}

@@ -1,5 +1,5 @@
 c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL). started with:
-TCP Port: 3306, Named Pipe: /tmp/mysql.sock
+Tcp Port: 3306, Named Pipe: /tmp/mysql.sock
 Time                 Id Command    Argument
 # Time: 2020-12-02T19:08:43.462468Z
 # User@Host: root[root] @ localhost [::1]  Id:     8
