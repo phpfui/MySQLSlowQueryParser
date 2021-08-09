@@ -139,7 +139,7 @@ class Parser
 
 		while (\strlen($line = $this->getNextLine()))
 			{
-			if (0 === \strpos($line, self::PORT))	// in middle of session, end it
+			if (0 === \stripos($line, self::PORT))	// in middle of session, end it
 				{
 				$currentSession[] = $line;
 				// eat the next line
@@ -165,7 +165,7 @@ class Parser
 
 				while (\strlen($line = $this->getNextLine()) && '#' !== $line[0])
 					{
-					if (0 === \strpos($line, self::PORT))	// found a session
+					if (0 === \stripos($line, self::PORT))	// found a session
 						{
 						$this->pushLine($line);
 						// push this and previous line back on to stack
