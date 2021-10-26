@@ -1,4 +1,4 @@
-# PHPFUI\MySQLSlowLog\Parser [![Tests](https://github.com/phpfui/MySQLSlowQueryParser/workflows/build/badge.svg)](https://github.com/phpfui/MySQLSlowQueryParser/actions?query=workflow%3Abuild) [![Latest Packagist release](https://img.shields.io/packagist/v/phpfui/mysql-slow-log-parser.svg)](https://packagist.org/packages/phpfui/mysql-slow-log-parser)
+# PHPFUI\MySQLSlowLog\Parser [![Tests](https://github.com/phpfui/MySQLSlowQueryParser/actions/workflows/tests.yml/badge.svg)](https://github.com/phpfui/MySQLSlowQueryParser/actions?query=workflow%3Atests) [![Latest Packagist release](https://img.shields.io/packagist/v/phpfui/mysql-slow-log-parser.svg)](https://packagist.org/packages/phpfui/mysql-slow-log-parser)
 
 PHP Parser for MySQL Slow Query Logs featuring sortable results
 

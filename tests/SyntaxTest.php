@@ -13,11 +13,8 @@ namespace PHPFUI\Tests;
  */
 class SyntaxTest extends \PHPFUI\PHPUnitSyntaxCoverage\Extensions
 	{
-
 	public function testDirectory() : void
 		{
-		$this->assertValidPHPDirectory(__DIR__ . '/../src/PHPFUI', 'PHPFUI directory has an error');
-		$this->assertValidPHPDirectory(__DIR__, __DIR__ . ' directory has an error');
+		$this->assertValidPHPDirectory(__DIR__ . '/../src', 'PHPFUI directory has an error');
 		}
-
 	}

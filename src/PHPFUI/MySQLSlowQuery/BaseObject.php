@@ -17,7 +17,7 @@ abstract class BaseObject
 
 			if (! \array_key_exists($field, $this->fields))
 			{
-			throw new Exception\Get("{$field} is not a valid field for " . \get_class($this));
+			throw new Exception\Get("{$field} is not a valid field for " . static::class);
 			}
 
 
@@ -35,7 +35,7 @@ abstract class BaseObject
 		{
 		if (! \array_key_exists($field, $this->fields))
 			{
-			throw new Exception\Set("{$field} is not a valid field for " . \get_class($this));
+			throw new Exception\Set("{$field} is not a valid field for " . static::class);
 			}
 
 		$this->fields[$field] = $value;
