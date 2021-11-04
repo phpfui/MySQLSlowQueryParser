@@ -21,7 +21,7 @@
         "friendsofphp/php-cs-fixer": "^3.0"
     },
     "autoload": {
-        "psr-4": {"PHPFUI\\": "src/PHPFUI"}
+        "psr-4": {"PHPFUI\\MySQLSlowQuery\\": "src/PHPFUI/MySQLSlowQuery/"}
     },
     "autoload-dev": {
         "psr-4": {"PHPFUI\\Tests\\": "tests"}
