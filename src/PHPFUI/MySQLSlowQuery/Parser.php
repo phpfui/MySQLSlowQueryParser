@@ -8,21 +8,21 @@ class Parser
 
 	private const TIME = '# Time: ';
 
-	private $entries = [];
+	private array $entries = [];
 
-	private $extraLines = [];
+	private array $extraLines = [];
 
-	private $fileName = '';
+	private string $fileName = '';
 
 	private $handle;
 
-	private $inSession = true;
+	private bool $inSession = true;
 
-	private $sessions = [];
+	private array $sessions = [];
 
-	private $sortColumn = 'Query_time';
+	private string $sortColumn = 'Query_time';
 
-	private $sortOrder = 'desc';
+	private string $sortOrder = 'desc';
 
 	/**
 	 * Parse a MySQL Slow Query Log file
