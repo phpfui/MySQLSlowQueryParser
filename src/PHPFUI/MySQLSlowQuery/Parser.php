@@ -179,10 +179,7 @@ class Parser
 
 						break;
 						}
-
-
-						$query[] = \trim($line);
-
+					$query[] = \trim($line);
 					}
 
 				if (\strlen($line) && '#' === $line[0])

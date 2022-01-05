@@ -13,15 +13,10 @@ abstract class BaseObject
 	 */
 	public function __get(string $field)
 		{
-
-
-			if (! \array_key_exists($field, $this->fields))
+		if (! \array_key_exists($field, $this->fields))
 			{
 			throw new Exception\Get("{$field} is not a valid field for " . static::class);
 			}
-
-
-
 
 		return $this->fields[$field];
 		}
