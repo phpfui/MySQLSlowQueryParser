@@ -3,7 +3,7 @@
 PHP Parser for MySQL Slow Query Logs featuring sortable results
 
 ## Requirements
- * PHP 7.1 or higher
+ * PHP 7.4 or higher
  * MySQL 5.7 or higher
 
 ## Usage
