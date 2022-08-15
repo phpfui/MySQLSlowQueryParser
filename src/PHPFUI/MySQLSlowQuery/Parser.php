@@ -163,7 +163,7 @@ class Parser
 
 				$query = [];
 
-				while (\strlen($line = $this->getNextLine()) && '#' !== $line[0])
+				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0])
 					{
 					if (0 === \stripos($line, self::PORT))	// found a session
 						{
