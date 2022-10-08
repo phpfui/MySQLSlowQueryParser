@@ -4,6 +4,7 @@ namespace PHPFUI\MySQLSlowQuery;
 
 class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 	{
+	// @phpstan-ignore-next-line
 	public function __construct(array $parameters = [])
 		{
 		$this->fields = [

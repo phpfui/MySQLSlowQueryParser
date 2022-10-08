@@ -1,0 +1,18 @@
+parameters:
+	level: 6
+	errorFormat: raw
+	editorUrl: '%%file%% %%line%% %%column%%: %%error%%'
+	paths:
+		- src
+		- tests
+	ignoreErrors:
+		-
+			message: '#Access to an undefined property PHPFUI\\MySQLSlowQuery\\Entry::#'
+			paths:
+				- tests/*
+		-
+			message: '#Access to an undefined property PHPFUI\\MySQLSlowQuery\\Session::#'
+			paths:
+				- tests/*
+
+

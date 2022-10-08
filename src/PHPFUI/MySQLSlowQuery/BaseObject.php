@@ -4,12 +4,16 @@ namespace PHPFUI\MySQLSlowQuery;
 
 abstract class BaseObject
 	{
+	/** @var array<string, mixed> $fields */
 	protected array $fields = [];
 
-	abstract public function __construct(array $paramters = []);
+	/** @param array<string, string> $parameters $parameters */
+	abstract public function __construct(array $parameters = []);
 
 	/**
 	 * Allows for $object->field syntax
+	 *
+	 * @return string | array<int, mixed>
 	 */
 	public function __get(string $field)
 		{
@@ -23,6 +27,8 @@ abstract class BaseObject
 
 	/**
 	 * Allows for $object->field = $x syntax
+	 *
+	 * @param mixed $value value to set
 	 *
 	 * @return mixed returns $value so you can string together assignments
 	 */
@@ -38,6 +44,7 @@ abstract class BaseObject
 		return $value;
 		}
 
+	/** @return array<string, mixed>  */
 	public function asArray() : array
 		{
 		return $this->fields;

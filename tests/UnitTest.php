@@ -35,6 +35,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		{
 		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\Get::class);
 		$entry = new \PHPFUI\MySQLSlowQuery\Entry();
+		// @phpstan-ignore-next-line
 		$entry->fred;
 		}
 
@@ -42,6 +43,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		{
 		$this->expectException(\PHPFUI\MySQLSlowQuery\Exception\Set::class);
 		$entry = new \PHPFUI\MySQLSlowQuery\Entry();
+		// @phpstan-ignore-next-line
 		$entry->fred = 'Ethyl';
 		}
 
