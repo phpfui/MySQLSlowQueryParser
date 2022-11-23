@@ -2,6 +2,11 @@
 
 namespace PHPFUI\MySQLSlowQuery;
 
+/**
+ * @property string $Server
+ * @property string $Port
+ * @property string $Transport
+ */
 class Session extends \PHPFUI\MySQLSlowQuery\BaseObject
 	{
 	/** @param array<int, string> $sessionData */
@@ -13,12 +18,10 @@ class Session extends \PHPFUI\MySQLSlowQuery\BaseObject
 			'Transport' => '',
 		];
 
-		// @phpstan-ignore-next-line
 		$this->Server = \trim(\str_replace('. started with:', '', $sessionData[0] ?? 'unknown'));
 
 		if (\strpos($sessionData[1] ?? '', ', '))
 			{
-			// @phpstan-ignore-next-line
 			[$this->Port, $this->Transport] = \explode(', ', \trim($sessionData[1]));
 			}
 		}

@@ -2,6 +2,19 @@
 
 namespace PHPFUI\MySQLSlowQuery;
 
+/**
+ * @property ?string $acceptedWaiver MySQL type timestamp
+ * @property string $Time
+ * @property string $User
+ * @property string $Host
+ * @property int $Id
+ * @property float $Query_time
+ * @property float $Lock_time
+ * @property int $Rows_sent
+ * @property int $Rows_examined
+ * @property array<string> $Query
+ * @property int $Session
+ */
 class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 	{
 	// @phpstan-ignore-next-line

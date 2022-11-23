@@ -59,7 +59,6 @@ class Parser
 
 			foreach ($this->entries as $entry)
 				{
-				// @phpstan-ignore-next-line
 				if ($entry->Session == $session)
 					{
 					$entries[] = $entry;
@@ -194,9 +193,7 @@ class Parser
 					{
 					$this->pushLine($line);
 					}
-				// @phpstan-ignore-next-line
 				$entry->Query = $query;
-				// @phpstan-ignore-next-line
 				$entry->Session = \count($this->sessions) - 1;
 				$this->entries[] = $entry;
 				}
