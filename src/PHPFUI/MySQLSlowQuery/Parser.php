@@ -14,8 +14,6 @@ class Parser
 	/** @var array<int, string> */
 	private array $extraLines = [];
 
-	private string $fileName = '';
-
 	// @phpstan-ignore-next-line
 	private $handle;
 
@@ -31,10 +29,9 @@ class Parser
 	/**
 	 * Parse a MySQL Slow Query Log file
 	 */
-	public function __construct(string $fileName)
-		{
-		$this->fileName = $fileName;
-		}
+	public function __construct(private string $fileName)
+ {
+ }
 
 	/**
 	 * Return \PHPFUI\MySQLSlowQuery\Entry entries from file
@@ -138,7 +135,7 @@ class Parser
 
 		if (! $this->handle)
 			{
-			throw new Exception\EmptyLog(__CLASS__ . ': ' . $this->fileName . ' appears to not exist or is empty');
+			throw new Exception\EmptyLog(self::class . ': ' . $this->fileName . ' appears to not exist or is empty');
 			}
 
 		$currentSession = [];
@@ -159,7 +156,7 @@ class Parser
 				{
 				$currentSession[] = $line;
 				}
-			elseif (0 === \strpos($line, self::TIME))	// start of log entry
+			elseif (\str_starts_with($line, self::TIME))	// start of log entry
 				{
 				$entry = new \PHPFUI\MySQLSlowQuery\Entry();
 				// parse the next three lines
