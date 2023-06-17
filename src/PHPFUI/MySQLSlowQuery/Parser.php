@@ -140,6 +140,8 @@ class Parser
 
 		$currentSession = [];
 
+		// Get line from stack (if pushed in below loop) or file. Any comment line
+		// not starting with "# Time: " gets discarded.
 		while (\strlen($line = $this->getNextLine()))
 			{
 			if (0 === \stripos($line, self::PORT))	// in middle of session, end it
@@ -154,6 +156,7 @@ class Parser
 				}
 			elseif ($this->inSession)	// in session, grab line
 				{
+				// store lines until "TCP Port: " is found in a next line
 				$currentSession[] = $line;
 				}
 			elseif (\str_starts_with($line, self::TIME))	// start of log entry
@@ -166,13 +169,15 @@ class Parser
 
 				$query = [];
 
+				// gather query lines until a non-query line is reached
 				// @phpstan-ignore-next-line
 				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0])
 					{
 					if (0 === \stripos($line, self::PORT))	// found a session
 						{
 						$this->pushLine($line);
-						// push this and previous line back on to stack
+						// Push this and previous line back on to stack. (Implicitly assume
+						// "TCP Port: " is on the second line of the new session header.)
 						if (\count($query))
 							{
 							$this->pushLine(\array_pop($query));
@@ -186,6 +191,7 @@ class Parser
 					$query[] = \trim($line);
 					}
 
+				// push unprocessed comment line (for next query) back on to stack
 				if (\strlen($line) && '#' === $line[0])
 					{
 					$this->pushLine($line);
@@ -199,6 +205,12 @@ class Parser
 		\fclose($this->handle);
 		}
 
+	/**
+	 * Push line back on to stack for further processing.
+	 *
+	 * Lines will later be processed by getNextLine() in the reverse order as
+	 * they are pushed.
+	 */
 	private function pushLine(string $line) : self
 		{
 		\array_unshift($this->extraLines, $line);
