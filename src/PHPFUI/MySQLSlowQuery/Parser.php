@@ -17,8 +17,6 @@ class Parser
 	// @phpstan-ignore-next-line
 	private $handle;
 
-	private bool $inSession = true;
-
 	/** @var array<int, \PHPFUI\MySQLSlowQuery\Session> */
 	private array $sessions = [];
 
@@ -138,24 +136,25 @@ class Parser
 			throw new Exception\EmptyLog(self::class . ': ' . $this->fileName . ' appears to not exist or is empty');
 			}
 
-		$currentSession = [];
+		$newSessionHeader = [];
 		$parseMode = '';
 		$previousTimeLine = '';
+		$processingSessionHeader = true;
 
 		// Get line from stack (if pushed in below loop) or file. Any comment line
 		// not starting with "# Time: " gets discarded.
 		while (\strlen($line = $this->getNextLine()))
 			{
-			if (0 === \stripos($line, self::PORT))	// in middle of session, end it
+			if (0 === \stripos($line, self::PORT))
 				{
-				$currentSession[] = $line;
-				$parseMode = $this->getParseMode($currentSession[0]);
+				$newSessionHeader[] = $line;
+				$parseMode = $this->getParseMode($newSessionHeader[0]);
 				// eat the next line
 				$this->getNextLine();
 				// create a new session
-				$this->sessions[] = new \PHPFUI\MySQLSlowQuery\Session($currentSession, $parseMode);
-				$currentSession = [];
-				$this->inSession = false;
+				$this->sessions[] = new \PHPFUI\MySQLSlowQuery\Session($newSessionHeader, $parseMode);
+				$newSessionHeader = [];
+				$processingSessionHeader = false;
 
 				// The next line is expected to be a comment connected to the first
 				// query in this session. In non backward compatible mode, check this:
@@ -165,15 +164,15 @@ class Parser
 					{
 					if ('#' !== $line[0])
 						{
-						$this->inSession = true;
+						$processingSessionHeader = true;
 						}
 					$this->pushLine($line);
 					}
 				}
-			elseif ($this->inSession)	// in session, grab line
+			elseif ($processingSessionHeader) // not in session yet
 				{
 				// store lines until "TCP Port: " is found in a next line
-				$currentSession[] = $line;
+				$newSessionHeader[] = $line;
 				}
 			elseif ('#' === $line[0])	// start of log entry
 				{
@@ -222,7 +221,7 @@ class Parser
 				// @phpstan-ignore-next-line
 				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0])
 					{
-					if (0 === \stripos($line, self::PORT))	// found a session
+					if (0 === \stripos($line, self::PORT))	// found a new session header
 						{
 						$this->pushLine($line);
 						// Push this and previous line back on to stack. (Implicitly assume
@@ -232,8 +231,8 @@ class Parser
 							$this->pushLine(\array_pop($query));
 							}
 						$line = '';
-						$currentSession = [];
-						$this->inSession = true;
+						$newSessionHeader = [];
+						$processingSessionHeader = true;
 
 						break;
 						}
