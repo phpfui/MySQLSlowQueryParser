@@ -137,6 +137,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[6]->Server);
 		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[7]->Server);
 		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[8]->Server);
+		$this->assertEquals('Unix socket: /run/mysqld/mysqld.sock', $sessions[8]->Transport);
 		// See comments in logfile for why the query is not found in the first/third
 		// entry (backward compatible style parsing). The comments are swept up into
 		// a sixth fake entry.

@@ -152,7 +152,7 @@ class Parser
 				// eat the next line
 				$this->getNextLine();
 				// create a new session
-				$this->sessions[] = new \PHPFUI\MySQLSlowQuery\Session($currentSession);
+				$this->sessions[] = new \PHPFUI\MySQLSlowQuery\Session($currentSession, $parseMode);
 				$currentSession = [];
 				$this->inSession = false;
 
