@@ -50,6 +50,15 @@ Time                 Id Command    Argument
 # Time: 220907 18:55:31
 # UnknownProperty: ignored_by_default
 # User@Host: root[root] @ localhost [::1]  Id:     8
+# Rows_affected: 1  Bytes_sent: 5709
+#
+# explain: id   select_type     table   type    possible_keys   key     key_len ref     rows    r_rows  filtered        r_filtered      Extra
+# explain: 1    SIMPLE  revision        ref     rev_page_timestamp      rev_page_timestamp      4       const   26      27.00   100.00  100.00  Using temporary; Using filesort
+# explain: 1    SIMPLE  comment_rev_comment     index   PRIMARY comment_hash    4       NULL    1       4456.00 100.00  100.00  Using index; Using join buffer (flat, BNL join)
+# explain: 1    SIMPLE  actor_rev_user  index   PRIMARY actor_name      257     NULL    1       50.00   100.00  100.00  Using index; Using join buffer (incremental, BNL join)
+# explain: 1    SIMPLE  temp_rev_comment        eq_ref  PRIMARY,revcomment_rev  PRIMARY 12      newgon_wiki.revision.rev_id,newgon_wiki.comment_rev_comment.comment_id  1       0.00    100.00  100.00      Using index
+# explain: 1    SIMPLE  temp_rev_user   eq_ref  PRIMARY,revactor_rev,actor_timestamp    PRIMARY 12      newgon_wiki.revision.rev_id,newgon_wiki.actor_rev_user.actor_id 1       0.02    100.00  100.00      Using index
+#
 use avance;
 SELECT 'THIS session is finally recognized as mariadb (so the query is recorded), because the PREVIOUS query block was a valid backward compatible one, with only two comment lines below the "Time: " line';
 mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution). started with:

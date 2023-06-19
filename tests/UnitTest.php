@@ -147,7 +147,10 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertEmpty($entries[2]->Query);
 		$this->assertNotEmpty($entries[3]->Query);
 		$this->assertNotEmpty($entries[4]->Query);
-		// Mariadb style parsing also processes comments above "Time: "
+		// Done on Mariadb only:
+		// comments above "Time: "
 		$this->assertEquals('0.001519', $entries[4]->Query_time);
+		// extra properties
+		$this->assertEquals('1', $entries[4]->Rows_affected);
 		}
 	}

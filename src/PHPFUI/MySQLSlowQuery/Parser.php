@@ -176,7 +176,7 @@ class Parser
 				}
 			elseif ('#' === $line[0])	// start of log entry
 				{
-				$entry = new \PHPFUI\MySQLSlowQuery\Entry();
+				$entry = new \PHPFUI\MySQLSlowQuery\Entry(['parse_mode' => $parseMode]);
 				$query = [];
 				if ($parseMode === '')
 					{
