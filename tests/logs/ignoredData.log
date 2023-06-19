@@ -1,0 +1,27 @@
+c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL). started with:
+Tcp Port: 3306, Named Pipe: /tmp/mysql.sock
+Time                 Id Command    Argument
+# FirstLine: ignored_by_default
+# Time: 2020-12-02T19:08:43.462468Z
+# UnknownProperty: ignored_by_default
+# User@Host: root[root] @ localhost [::1]  Id:     8
+# Query_time: 0.001519  Lock_time: 0.000214 Rows_sent: 0  Rows_examined: 0
+use avance;
+SET timestamp=1606936123;
+SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesting_event_id = 17;
+# FirstLine: ignored_by_default
+# Time: 2020-12-02T19:08:43.462468Z
+# User@Host: root[root] @ localhost [::1]  Id:     8
+# Query_time: 0.001519  Lock_time: 0.000214 Rows_sent: 0  Rows_examined: 0
+use avance;
+SET timestamp=1606936123;
+SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesting_event_id = 17;
+#
+# Explanation of above properties vs. (default) parser logic:
+# 1. The UnknownProperty property is ignored because Entry::setFromLine()
+#    throws away any properties that are not explicitly defined.
+# 2. The FirstLine property is ignored because Parser::parse() throws away any
+#    line until "# Time: " is encountered.
+# 3. The query part in the first entry is ignored because Parser::parse() parses
+#    exactly three commented lines; any further comment line will revert to
+#    point 1 (and therefore ignore the query plus any other unknown lines).

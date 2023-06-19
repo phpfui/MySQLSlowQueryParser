@@ -20,6 +20,16 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertCount(0, $parser->getEntries());
 		}
 
+		public function testBadFile2() : void
+	{
+		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/ignoredData.log');
+		$this->assertCount(1, $parser->getSessions());
+		$entries = $parser->getEntries();
+		$this->assertCount(2, $entries);
+		// See comments in logfile on why the query is not found.
+		$this->assertEmpty($entries[0]->Query);
+	}
+
 	public function testDoubleSession() : void
 		{
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/doubleSession.log');
