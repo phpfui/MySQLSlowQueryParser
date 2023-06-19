@@ -16,6 +16,16 @@ SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesti
 use avance;
 SET timestamp=1606936123;
 SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesting_event_id = 17;
+mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution). started with:
+Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+# Query_time: 0.001519  Lock_time: 0.000214 Rows_sent: 0  Rows_examined: 0
+# Time: 220907 18:55:31
+# UnknownProperty: ignored_by_default
+# User@Host: root[root] @ localhost [::1]  Id:     8
+use avance;
+SET timestamp=1606936123;
+SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesting_event_id = 17;
 #
 # Explanation of above properties vs. (default) parser logic:
 # 1. The UnknownProperty property is ignored because Entry::setFromLine()
@@ -25,3 +35,10 @@ SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesti
 # 3. The query part in the first entry is ignored because Parser::parse() parses
 #    exactly three commented lines; any further comment line will revert to
 #    point 1 (and therefore ignore the query plus any other unknown lines).
+#
+# For mariadb,
+# - 1 is unchanged.
+# - 2 is fixed. (It has to be, because "# Time: " is not always included if the
+#   previous logged query is executed at the same time.)
+# - 3 is fixed: the query is not ignored (because we don't process exactly three
+#   comment lines)

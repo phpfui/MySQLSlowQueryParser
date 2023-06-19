@@ -20,16 +20,6 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertCount(0, $parser->getEntries());
 		}
 
-		public function testBadFile2() : void
-	{
-		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/ignoredData.log');
-		$this->assertCount(1, $parser->getSessions());
-		$entries = $parser->getEntries();
-		$this->assertCount(2, $entries);
-		// See comments in logfile on why the query is not found.
-		$this->assertEmpty($entries[0]->Query);
-	}
-
 	public function testDoubleSession() : void
 		{
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/doubleSession.log');
@@ -129,5 +119,21 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals('0.000375', $entry->Lock_time);
 		$this->assertEquals('0', $entry->Rows_sent);
 		$this->assertEquals('6', $entry->Rows_examined);
+		}
+
+	public function testMysqlVsMariadb() : void
+		{
+		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/ignoredData.log');
+		$sessions = $parser->getSessions();
+		$this->assertCount(2, $sessions);
+		$entries = $parser->getEntries();
+		// See comments in logfile on why the query is not found in the first entry
+		// (backward compatible style parsing). The comments are swept up into a
+		// fourth fake entry.
+		$this->assertCount(4, $entries);
+		$this->assertEmpty($entries[0]->Query);
+		$this->assertNotEmpty($entries[2]->Query);
+		// Mariadb style parsing also processes comments above "Time: "
+		$this->assertEquals('0.001519', $entries[2]->Query_time);
 		}
 	}

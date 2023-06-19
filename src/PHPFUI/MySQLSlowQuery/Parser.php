@@ -138,6 +138,7 @@ class Parser
 			throw new Exception\EmptyLog(self::class . ': ' . $this->fileName . ' appears to not exist or is empty');
 			}
 
+		$parseMode = '';
 		$currentSession = [];
 
 		// Get line from stack (if pushed in below loop) or file. Any comment line
@@ -147,6 +148,7 @@ class Parser
 			if (0 === \stripos($line, self::PORT))	// in middle of session, end it
 				{
 				$currentSession[] = $line;
+				$parseMode = $this->getParseMode($currentSession[0]);
 				// eat the next line
 				$this->getNextLine();
 				// create a new session
@@ -159,17 +161,37 @@ class Parser
 				// store lines until "TCP Port: " is found in a next line
 				$currentSession[] = $line;
 				}
-			elseif (\str_starts_with($line, self::TIME))	// start of log entry
+			elseif ('#' === $line[0])	// start of log entry
 				{
 				$entry = new \PHPFUI\MySQLSlowQuery\Entry();
-				// parse the next three lines
-				$entry->setFromLine($line);
-				$entry->setFromLine(\fgets($this->handle));
-				$entry->setFromLine(\fgets($this->handle));
-
 				$query = [];
+				if ($parseMode === '')
+					{
+					// Backward compatible parsing:
+					// - Ignore comment lines up until "# Time:"
+					// - Iarse exactly three lines. If any of these are non-comments,
+					//   throw an exception.
+					// - If there are more than three comment lines, the query below
+					//   them is ignored.
+					if (!\str_starts_with($line, self::TIME))
+						continue;
+					$entry->setFromLine($line);
+					$entry->setFromLine(\fgets($this->handle));
+					$entry->setFromLine(\fgets($this->handle));
+					}
+				else
+					{
+					// Parse any following comment lines, and interpret the next
+					// non-comment line as a query line.
+					do
+						{
+						$entry->setFromLine($line);
+						}
+					while (\strlen($line = $this->getNextLine()) > 0 && '#' === $line[0]);
+					$query[] = \trim($line);
+					}
 
-				// gather query lines until a non-query line is reached
+				// gather (more) query lines until a non-query line is reached
 				// @phpstan-ignore-next-line
 				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0])
 					{
@@ -216,5 +238,13 @@ class Parser
 		\array_unshift($this->extraLines, $line);
 
 		return $this;
+		}
+
+	/**
+	 * Derive a string value that determines how the log is parsed.
+	 */
+	private function getParseMode(string $sessionHeaderFirstLine) : string
+		{
+		return \stripos($sessionHeaderFirstLine, 'MariaDB') ? 'mariadb' : '';
 		}
 	}
