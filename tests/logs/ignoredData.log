@@ -61,6 +61,10 @@ Time                 Id Command    Argument
 #
 use avance;
 SELECT 'THIS session is finally recognized as mariadb (so the query is recorded), because the PREVIOUS query block was a valid backward compatible one, with only two comment lines below the "Time: " line';
+# User@Host: root[root] @ localhost [::1]  Id:     8
+# Query_time: 0.001519  Lock_time: 0.000214 Rows_sent: 0  Rows_examined: 0
+# Rows_affected: 1  Bytes_sent: 5709
+SELECT 'Header without time spec';
 mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution). started with:
 Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock
 Time                 Id Command    Argument

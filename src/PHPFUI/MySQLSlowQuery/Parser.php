@@ -138,8 +138,9 @@ class Parser
 			throw new Exception\EmptyLog(self::class . ': ' . $this->fileName . ' appears to not exist or is empty');
 			}
 
-		$parseMode = '';
 		$currentSession = [];
+		$parseMode = '';
+		$previousTimeLine = '';
 
 		// Get line from stack (if pushed in below loop) or file. Any comment line
 		// not starting with "# Time: " gets discarded.
@@ -194,14 +195,27 @@ class Parser
 					}
 				else
 					{
-					// Parse any following comment lines, and interpret the next
-					// non-comment line as a query line.
-					do
-						{
-						$entry->setFromLine($line);
-						}
-					while (\strlen($line = $this->getNextLine()) > 0 && '#' === $line[0]);
-					$query[] = \trim($line);
+						$timeLineFound = false;
+						// Parse any following comment lines, and interpret the next
+						// non-comment line as a query line.
+						do
+							{
+							$entry->setFromLine($line);
+							if ($parseMode == 'mariadb' && \str_starts_with($line, self::TIME))
+								{
+								$timeLineFound = true;
+								$previousTimeLine = $line;
+								}
+							}
+						while (\strlen($line = $this->getNextLine()) > 0 && '#' === $line[0]);
+						if ($parseMode == 'mariadb' && !$timeLineFound && $previousTimeLine)
+							{
+							// Always add the Time property. Assume that if it is not in the
+							// log, it's the same as the previous logged query, and that the
+							// line contains no other properties we don't want to add.
+							$entry->setFromLine($previousTimeLine);
+							}
+						$query[] = \trim($line);
 					}
 
 				// gather (more) query lines until a non-query line is reached

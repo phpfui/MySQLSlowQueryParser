@@ -142,13 +142,14 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals('Unix socket: /run/mysqld/mysqld.sock', $sessions[8]->Transport);
 		// See comments in logfile for why the query is not found in the first/third
 		// entry (backward compatible style parsing). The comments are swept up into
-		// a sixth fake entry.
-		$this->assertCount(6, $entries);
+		// a seventh fake entry.
+		$this->assertCount(7, $entries);
 		$this->assertEmpty($entries[0]->Query);
 		$this->assertNotEmpty($entries[1]->Query);
 		$this->assertEmpty($entries[2]->Query);
 		$this->assertNotEmpty($entries[3]->Query);
 		$this->assertNotEmpty($entries[4]->Query);
+		$this->assertNotEmpty($entries[5]->Query);
 		// Done on Mariadb only:
 		// Comments above "Time: " are parsed:
 		$this->assertEquals('0.001519', $entries[4]->Query_time);
@@ -156,5 +157,7 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals('1', $entries[4]->Rows_affected);
 		// "Time: 220907 18:55:33" is reformatted to be the same as mysql:
 		$this->assertEquals('2022-09-07T18:55:33.000000Z', $entries[4]->Time);
+		// Time is copied into next entry if not present in comment header:
+		$this->assertEquals('2022-09-07T18:55:33.000000Z', $entries[5]->Time);
 		}
 	}
