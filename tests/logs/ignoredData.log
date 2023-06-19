@@ -47,7 +47,7 @@ mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary dis
 Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock
 Time                 Id Command    Argument
 # Query_time: 0.001519  Lock_time: 0.000214 Rows_sent: 0  Rows_examined: 0
-# Time: 220907 18:55:31
+# Time: 220907 18:55:33
 # UnknownProperty: ignored_by_default
 # User@Host: root[root] @ localhost [::1]  Id:     8
 # Rows_affected: 1  Bytes_sent: 5709

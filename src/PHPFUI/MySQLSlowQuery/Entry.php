@@ -96,6 +96,19 @@ class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 			$line = \str_replace(' [', '[', $line);
 			}
 
+		if (\str_starts_with($line, '# Time') && ($this->parameters['parse_mode'] ?? '') == 'mariadb')
+			{
+			// A "Time" value is so for the only one with a space inside the value.
+			// Unify with mysql log format: replace space with T, replace second space
+			// with leading zero, expand YYMMDD value and add microseconds.
+			$parts = \explode(' ', \substr($line, 8), 2);
+			if ($parts[1][0] === ' ')
+				{
+				$parts[1][0] = '0';
+				}
+			$line = \preg_replace('/(\d{2})(\d{2})(\d{2})/', "# Time: 20\\1-\\2-\\3T{$parts[1]}.000000Z", $parts[0]);
+			}
+
 		$parts = \explode(' ', \substr($line, 2));
 
 		while (\count($parts))

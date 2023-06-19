@@ -135,6 +135,8 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals('Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock', $sessions[4]->Server);
 		$this->assertEquals('Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock', $sessions[5]->Server);
 		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[6]->Server);
+		// It took until the previous session for mariadb to kick in, but going
+		// forward "sessions without query entries" are parsed OK.
 		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[7]->Server);
 		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[8]->Server);
 		$this->assertEquals('Unix socket: /run/mysqld/mysqld.sock', $sessions[8]->Transport);
@@ -148,9 +150,11 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertNotEmpty($entries[3]->Query);
 		$this->assertNotEmpty($entries[4]->Query);
 		// Done on Mariadb only:
-		// comments above "Time: "
+		// Comments above "Time: " are parsed:
 		$this->assertEquals('0.001519', $entries[4]->Query_time);
-		// extra properties
+		// Extra properties:
 		$this->assertEquals('1', $entries[4]->Rows_affected);
+		// "Time: 220907 18:55:33" is reformatted to be the same as mysql:
+		$this->assertEquals('2022-09-07T18:55:33.000000Z', $entries[4]->Time);
 		}
 	}
