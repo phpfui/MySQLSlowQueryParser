@@ -155,6 +155,19 @@ class Parser
 				$this->sessions[] = new \PHPFUI\MySQLSlowQuery\Session($currentSession);
 				$currentSession = [];
 				$this->inSession = false;
+
+				// The next line is expected to be a comment connected to the first
+				// query in this session. In non backward compatible mode, check this:
+				// if it's not a comment line, this is assumed to be the start of the
+				// next session header (i.e. there are zero queries in this session).
+				if ($parseMode === 'mariadb' && \strlen($line = $this->getNextLine()) > 0)
+					{
+					if ('#' !== $line[0])
+						{
+						$this->inSession = true;
+						}
+					$this->pushLine($line);
+					}
 				}
 			elseif ($this->inSession)	// in session, grab line
 				{

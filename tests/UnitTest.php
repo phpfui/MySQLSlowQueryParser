@@ -125,15 +125,28 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		{
 		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/ignoredData.log');
 		$sessions = $parser->getSessions();
-		$this->assertCount(2, $sessions);
 		$entries = $parser->getEntries();
-		// See comments in logfile on why the query is not found in the first entry
-		// (backward compatible style parsing). The comments are swept up into a
-		// fourth fake entry.
-		$this->assertCount(4, $entries);
+		$this->assertCount(9, $sessions);
+		// See comments in logfile for why session 3-6 are buggy and 7-9 are not.
+		$this->assertEquals('c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL)', $sessions[0]->Server);
+		$this->assertEquals('c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL)', $sessions[1]->Server);
+		$this->assertEquals('Tcp Port: 3306, Named Pipe: /tmp/mysql.sock', $sessions[2]->Server);
+		$this->assertEquals('Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock', $sessions[3]->Server);
+		$this->assertEquals('Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock', $sessions[4]->Server);
+		$this->assertEquals('Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock', $sessions[5]->Server);
+		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[6]->Server);
+		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[7]->Server);
+		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[8]->Server);
+		// See comments in logfile for why the query is not found in the first/third
+		// entry (backward compatible style parsing). The comments are swept up into
+		// a sixth fake entry.
+		$this->assertCount(6, $entries);
 		$this->assertEmpty($entries[0]->Query);
-		$this->assertNotEmpty($entries[2]->Query);
+		$this->assertNotEmpty($entries[1]->Query);
+		$this->assertEmpty($entries[2]->Query);
+		$this->assertNotEmpty($entries[3]->Query);
+		$this->assertNotEmpty($entries[4]->Query);
 		// Mariadb style parsing also processes comments above "Time: "
-		$this->assertEquals('0.001519', $entries[2]->Query_time);
+		$this->assertEquals('0.001519', $entries[4]->Query_time);
 		}
 	}

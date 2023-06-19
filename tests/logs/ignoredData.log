@@ -16,6 +16,33 @@ SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesti
 use avance;
 SET timestamp=1606936123;
 SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesting_event_id = 17;
+c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL). started with:
+Tcp Port: 3306, Named Pipe: /tmp/mysql.sock
+Time                 Id Command    Argument
+c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL). started with:
+Tcp Port: 3306, Named Pipe: /tmp/mysql.sock
+Time                 Id Command    Argument
+mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution). started with:
+Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution). started with:
+Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+# Time: 220907 18:55:31
+# UnknownProperty: ignored_by_default
+# User@Host: root[root] @ localhost [::1]  Id:     8
+# Query_time: 0.001519  Lock_time: 0.000214 Rows_sent: 0  Rows_examined: 0
+use avance;
+SELECT 'this session is still being processed as non-mariadb style, so this query is still not recorded (because extra comment line)';
+mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution). started with:
+Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+# FirstLine: ignored_by_default
+# Time: 220907 18:55:31
+# User@Host: root[root] @ localhost [::1]  Id:     8
+# Query_time: 0.001519  Lock_time: 0.000214 Rows_sent: 0  Rows_examined: 0
+use avance;
+SELECT 'this session is STILL being processed as non-mariadb style, but the query is recorded (because no extra comment line)';
 mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution). started with:
 Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock
 Time                 Id Command    Argument
@@ -24,8 +51,13 @@ Time                 Id Command    Argument
 # UnknownProperty: ignored_by_default
 # User@Host: root[root] @ localhost [::1]  Id:     8
 use avance;
-SET timestamp=1606936123;
-SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesting_event_id = 17;
+SELECT 'THIS session is finally recognized as mariadb (so the query is recorded), because the PREVIOUS query block was a valid backward compatible one, with only two comment lines below the "Time: " line';
+mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution). started with:
+Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution). started with:
+Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock
+Time                 Id Command    Argument
 #
 # Explanation of above properties vs. (default) parser logic:
 # 1. The UnknownProperty property is ignored because Entry::setFromLine()
@@ -35,6 +67,9 @@ SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesti
 # 3. The query part in the first entry is ignored because Parser::parse() parses
 #    exactly three commented lines; any further comment line will revert to
 #    point 1 (and therefore ignore the query plus any other unknown lines).
+# 4. If a session header is immediately followed by another session header
+#    (i.e. it has zero queries logged), the new session object does not get
+#    the first line and its Server property says "TCP port: ..." -> bug.
 #
 # For mariadb,
 # - 1 is unchanged.
@@ -42,3 +77,5 @@ SELECT st.* FROM performance_schema.events_stages_history_long st WHERE st.nesti
 #   previous logged query is executed at the same time.)
 # - 3 is fixed: the query is not ignored (because we don't process exactly three
 #   comment lines)
+# - 4 is fixed, but only after any queries are processed. The last three in the
+#   above block of four adjacent session headers are all 'buggy'.
