@@ -3,23 +3,44 @@
 namespace PHPFUI\MySQLSlowQuery;
 
 /**
- * @property ?string $acceptedWaiver MySQL type timestamp
- * @property string $Time
- * @property string $User
- * @property string $Host
- * @property int $Id
- * @property float $Query_time
- * @property float $Lock_time
- * @property int $Rows_sent
- * @property int $Rows_examined
  * @property array<string> $Query
+ * @property float $Lock_time
+ * @property float $Query_time
+ * @property int $Bytes_sent
+ * @property int $Id
+ * @property int $Merge_passes
+ * @property int $Rows_affected
+ * @property int $Rows_examined
+ * @property int $Rows_sent
  * @property int $Session
+ * @property int $Thread_id
+ * @property int $Tmp_disk_tables
+ * @property int $Tmp_table_sizes
+ * @property int $Tmp_tables
+ * @property string $explain
+ * @property string $Filesort
+ * @property string $Filesort_on_disk
+ * @property string $Full_join
+ * @property string $Full_scan
+ * @property string $Host
+ * @property string $Priority_queue
+ * @property string $QC_hit
+ * @property string $Schema
+ * @property string $Time
+ * @property string $Tmp_table
+ * @property string $Tmp_table_on_disk
+ * @property string $User
  */
 class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 	{
+	/**
+	 * @var array<string, string>
+	 */
 	private array $parameters = [];
 
-	// @phpstan-ignore-next-line
+	/**
+	 * @param array<string, string> $parameters
+	 */
 	public function __construct(array $parameters = [])
 		{
 		$this->parameters = $parameters;

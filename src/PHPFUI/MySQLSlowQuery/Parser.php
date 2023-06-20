@@ -28,8 +28,8 @@ class Parser
 	 * Parse a MySQL Slow Query Log file
 	 */
 	public function __construct(private string $fileName)
- {
- }
+		{
+		}
 
 	/**
 	 * Return \PHPFUI\MySQLSlowQuery\Entry entries from file
@@ -218,9 +218,9 @@ class Parser
 							$previousTimeLine = $line;
 							}
 						}
-					while ((\strlen($line = $this->getNextLine()) > 0) && ('#' === $line[0]));
+					while (\strlen($line = $this->getNextLine()) > 0 && '#' === $line[0]); // @phpstan-ignore-line
 
-					if ('mariadb' == $parseMode && ! $timeLineFound && $previousTimeLine)
+					if ('mariadb' == $parseMode && ! $timeLineFound && $previousTimeLine) // @phpstan-ignore-line
 						{
 						// Always add the Time property. Assume that if it is not in the
 						// log, it's the same as the previous logged query, and that the
@@ -231,8 +231,7 @@ class Parser
 					}
 
 				// gather (more) query lines until a non-query line is reached
-				// @phpstan-ignore-next-line
-				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0])
+				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0]) // @phpstan-ignore-line
 					{
 					if (0 === \stripos($line, self::PORT))	// found a new session header
 						{

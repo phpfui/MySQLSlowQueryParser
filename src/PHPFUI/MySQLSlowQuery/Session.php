@@ -11,7 +11,7 @@ namespace PHPFUI\MySQLSlowQuery;
 class Session extends \PHPFUI\MySQLSlowQuery\BaseObject
 	{
 	/** @param array<int, string> $sessionData */
-	public function __construct(array $sessionData = [], $parseMode = '')
+	public function __construct(array $sessionData = [], string $parseMode = '')
 		{
 		$this->fields = [
 			// Almost the full first line, i.e. executable and version.

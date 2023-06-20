@@ -41,7 +41,7 @@ abstract class BaseObject
 
 		$this->fields[$field] = $value;
 
-		return $value;
+
 		}
 
 	/** @return array<string, mixed>  */
