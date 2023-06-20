@@ -17,9 +17,15 @@ namespace PHPFUI\MySQLSlowQuery;
  */
 class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 	{
+	private array $parameters = [];
+
 	// @phpstan-ignore-next-line
 	public function __construct(array $parameters = [])
 		{
+		$this->parameters = $parameters;
+
+		// Ignore $parameters; restrict available fields based on known log files
+		// produced by specific server versions.
 		$this->fields = [
 			'Time' => '',
 			'User' => '',
@@ -30,8 +36,35 @@ class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 			'Rows_sent' => 0,
 			'Rows_examined' => 0,
 			'Query' => [],
+			// Session is not present in logfile. It starts at 0 and is pointed to
+			// $session (not object but index in array of sessions) later.
 			'Session' => 0,
 		];
+		if (($this->parameters['parse_mode'] ?? '') == 'mariadb')
+			{
+			unset($this->fields['Id']);
+			$this->fields += [
+				'Thread_id' => 0,
+				'Schema' => '',
+				'QC_hit' => '',
+				'Rows_affected' => 0,
+				'Bytes_sent' => 0,
+				// Apparently dependent on configuration - not present in all logfiles:
+				'Tmp_tables' => 0,
+				'Tmp_disk_tables' => 0,
+				'Tmp_table_sizes' => 0,
+				'Full_scan' => '',
+				'Full_join' => '',
+				'Tmp_table' => '',
+				'Tmp_table_on_disk' => '',
+				'Filesort' => '',
+				'Filesort_on_disk' => '',
+				'Merge_passes' => 0,
+				'Priority_queue' => '',
+				// 'explain: ' is not just one property; needs special parsing.
+				'explain' => '',
+			];
+			}
 		}
 
 	/**
@@ -61,6 +94,19 @@ class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 			$line = \str_replace('# User@Host', '# User', $line);
 			$line = \str_replace('@', 'Host:', $line);
 			$line = \str_replace(' [', '[', $line);
+			}
+
+		if (\str_starts_with($line, '# Time') && ($this->parameters['parse_mode'] ?? '') == 'mariadb')
+			{
+			// A "Time" value is so for the only one with a space inside the value.
+			// Unify with mysql log format: replace space with T, replace second space
+			// with leading zero, expand YYMMDD value and add microseconds.
+			$parts = \explode(' ', \substr($line, 8), 2);
+			if ($parts[1][0] === ' ')
+				{
+				$parts[1][0] = '0';
+				}
+			$line = \preg_replace('/(\d{2})(\d{2})(\d{2})/', "# Time: 20\\1-\\2-\\3T{$parts[1]}.000000Z", $parts[0]);
 			}
 
 		$parts = \explode(' ', \substr($line, 2));

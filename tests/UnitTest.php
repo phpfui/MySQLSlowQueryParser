@@ -120,4 +120,44 @@ class UnitTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals('0', $entry->Rows_sent);
 		$this->assertEquals('6', $entry->Rows_examined);
 		}
+
+	public function testMysqlVsMariadb() : void
+		{
+		$parser = new \PHPFUI\MySQLSlowQuery\Parser(__DIR__ . '/logs/ignoredData.log');
+		$sessions = $parser->getSessions();
+		$entries = $parser->getEntries();
+		$this->assertCount(9, $sessions);
+		// See comments in logfile for why session 3-6 are buggy and 7-9 are not.
+		$this->assertEquals('c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL)', $sessions[0]->Server);
+		$this->assertEquals('c:\wamp64\bin\mysql\mysql8.0.21\bin\mysqld.exe, Version: 8.0.21 (MySQL Community Server - GPL)', $sessions[1]->Server);
+		$this->assertEquals('Tcp Port: 3306, Named Pipe: /tmp/mysql.sock', $sessions[2]->Server);
+		$this->assertEquals('Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock', $sessions[3]->Server);
+		$this->assertEquals('Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock', $sessions[4]->Server);
+		$this->assertEquals('Tcp port: 0  Unix socket: /run/mysqld/mysqld.sock', $sessions[5]->Server);
+		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[6]->Server);
+		// It took until the previous session for mariadb to kick in, but going
+		// forward "sessions without query entries" are parsed OK.
+		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[7]->Server);
+		$this->assertEquals('mysqld, Version: 10.7.1-MariaDB-1:10.7.1+maria~focal-log (mariadb.org binary distribution)', $sessions[8]->Server);
+		$this->assertEquals('Unix socket: /run/mysqld/mysqld.sock', $sessions[8]->Transport);
+		// See comments in logfile for why the query is not found in the first/third
+		// entry (backward compatible style parsing). The comments are swept up into
+		// a seventh fake entry.
+		$this->assertCount(7, $entries);
+		$this->assertEmpty($entries[0]->Query);
+		$this->assertNotEmpty($entries[1]->Query);
+		$this->assertEmpty($entries[2]->Query);
+		$this->assertNotEmpty($entries[3]->Query);
+		$this->assertNotEmpty($entries[4]->Query);
+		$this->assertNotEmpty($entries[5]->Query);
+		// Done on Mariadb only:
+		// Comments above "Time: " are parsed:
+		$this->assertEquals('0.001519', $entries[4]->Query_time);
+		// Extra properties:
+		$this->assertEquals('1', $entries[4]->Rows_affected);
+		// "Time: 220907 18:55:33" is reformatted to be the same as mysql:
+		$this->assertEquals('2022-09-07T18:55:33.000000Z', $entries[4]->Time);
+		// Time is copied into next entry if not present in comment header:
+		$this->assertEquals('2022-09-07T18:55:33.000000Z', $entries[5]->Time);
+		}
 	}
