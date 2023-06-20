@@ -40,6 +40,7 @@ class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 			// $session (not object but index in array of sessions) later.
 			'Session' => 0,
 		];
+
 		if (($this->parameters['parse_mode'] ?? '') == 'mariadb')
 			{
 			unset($this->fields['Id']);
@@ -102,7 +103,8 @@ class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 			// Unify with mysql log format: replace space with T, replace second space
 			// with leading zero, expand YYMMDD value and add microseconds.
 			$parts = \explode(' ', \substr($line, 8), 2);
-			if ($parts[1][0] === ' ')
+
+			if (' ' === $parts[1][0])
 				{
 				$parts[1][0] = '0';
 				}

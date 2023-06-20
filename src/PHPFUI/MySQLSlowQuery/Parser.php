@@ -127,6 +127,14 @@ class Parser
 		return $line;
 		}
 
+	/**
+	 * Derive a string value that determines how the log is parsed.
+	 */
+	private function getParseMode(string $sessionHeaderFirstLine) : string
+		{
+		return \stripos($sessionHeaderFirstLine, 'MariaDB') ? 'mariadb' : '';
+		}
+
 	private function parse() : void
 		{
 		$this->handle = @\fopen($this->fileName, 'r');
@@ -160,7 +168,7 @@ class Parser
 				// query in this session. In non backward compatible mode, check this:
 				// if it's not a comment line, this is assumed to be the start of the
 				// next session header (i.e. there are zero queries in this session).
-				if ($parseMode === 'mariadb' && \strlen($line = $this->getNextLine()) > 0)
+				if ('mariadb' === $parseMode && \strlen($line = $this->getNextLine()) > 0)
 					{
 					if ('#' !== $line[0])
 						{
@@ -178,7 +186,8 @@ class Parser
 				{
 				$entry = new \PHPFUI\MySQLSlowQuery\Entry(['parse_mode' => $parseMode]);
 				$query = [];
-				if ($parseMode === '')
+
+				if ('' === $parseMode)
 					{
 					// Backward compatible parsing:
 					// - Ignore comment lines up until "# Time:"
@@ -186,35 +195,39 @@ class Parser
 					//   throw an exception.
 					// - If there are more than three comment lines, the query below
 					//   them is ignored.
-					if (!\str_starts_with($line, self::TIME))
+					if (! \str_starts_with($line, self::TIME))
+						{
 						continue;
+						}
 					$entry->setFromLine($line);
 					$entry->setFromLine(\fgets($this->handle));
 					$entry->setFromLine(\fgets($this->handle));
 					}
 				else
 					{
-						$timeLineFound = false;
-						// Parse any following comment lines, and interpret the next
-						// non-comment line as a query line.
-						do
+					$timeLineFound = false;
+					// Parse any following comment lines, and interpret the next
+					// non-comment line as a query line.
+					do
+						{
+						$entry->setFromLine($line);
+
+						if ('mariadb' == $parseMode && \str_starts_with($line, self::TIME))
 							{
-							$entry->setFromLine($line);
-							if ($parseMode == 'mariadb' && \str_starts_with($line, self::TIME))
-								{
-								$timeLineFound = true;
-								$previousTimeLine = $line;
-								}
+							$timeLineFound = true;
+							$previousTimeLine = $line;
 							}
-						while (\strlen($line = $this->getNextLine()) > 0 && '#' === $line[0]);
-						if ($parseMode == 'mariadb' && !$timeLineFound && $previousTimeLine)
-							{
-							// Always add the Time property. Assume that if it is not in the
-							// log, it's the same as the previous logged query, and that the
-							// line contains no other properties we don't want to add.
-							$entry->setFromLine($previousTimeLine);
-							}
-						$query[] = \trim($line);
+						}
+					while ((\strlen($line = $this->getNextLine()) > 0) && ('#' === $line[0]));
+
+					if ('mariadb' == $parseMode && ! $timeLineFound && $previousTimeLine)
+						{
+						// Always add the Time property. Assume that if it is not in the
+						// log, it's the same as the previous logged query, and that the
+						// line contains no other properties we don't want to add.
+						$entry->setFromLine($previousTimeLine);
+						}
+					$query[] = \trim($line);
 					}
 
 				// gather (more) query lines until a non-query line is reached
@@ -264,13 +277,5 @@ class Parser
 		\array_unshift($this->extraLines, $line);
 
 		return $this;
-		}
-
-	/**
-	 * Derive a string value that determines how the log is parsed.
-	 */
-	private function getParseMode(string $sessionHeaderFirstLine) : string
-		{
-		return \stripos($sessionHeaderFirstLine, 'MariaDB') ? 'mariadb' : '';
 		}
 	}

@@ -29,7 +29,8 @@ class Session extends \PHPFUI\MySQLSlowQuery\BaseObject
 		$this->Server = \trim(\str_replace('. started with:', '', $sessionData[0] ?? 'unknown'));
 		$this->Version = \substr(\strstr($this->Server, 'Version: ') ?: '', 9);
 
-		$delimiter = $parseMode == 'mariadb' ? '  ' : ', ';
+		$delimiter = 'mariadb' == $parseMode ? '  ' : ', ';
+
 		if (\strpos($sessionData[1] ?? '', $delimiter))
 			{
 			[$this->Port, $this->Transport] = \explode($delimiter, \trim($sessionData[1]));
