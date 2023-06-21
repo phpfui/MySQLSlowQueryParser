@@ -1,10 +1,10 @@
 # PHPFUI\MySQLSlowLog\Parser [![Tests](https://github.com/phpfui/MySQLSlowQueryParser/actions/workflows/tests.yml/badge.svg)](https://github.com/phpfui/MySQLSlowQueryParser/actions?query=workflow%3Atests) [![Latest Packagist release](https://img.shields.io/packagist/v/phpfui/mysql-slow-log-parser.svg)](https://packagist.org/packages/phpfui/mysql-slow-log-parser) ![](https://img.shields.io/badge/PHPStan-level%206-brightgreen.svg?style=flat)
 
-PHP Parser for MySQL Slow Query Logs featuring sortable results
+PHP Parser for MySQL and MariaDB Slow Query Logs featuring sortable results
 
 ## Requirements
  * Modern PHP version
- * MySQL 5.7 or higher
+ * MySQL 5.7 or higher, or MariaDB
 
 ## Usage
 ~~~php
@@ -42,10 +42,30 @@ Supported fields:
  * Query (array)
  * Session (zero based)
 
+**MariaDB** adds the following fields:
+ * Thread_id
+ * Schema
+ * QC_hit
+ * Rows_affected
+ * Bytes_sent
+ * Tmp_tables
+ * Tmp_disk_tables
+ * Tmp_table_sizes
+ * Full_scan
+ * Full_join
+ * Tmp_table
+ * Tmp_table_on_disk
+ * Filesort
+ * Filesort_on_disk
+ * Merge_passes
+ * Priority_queue
+ * explain
+
 ## Sessions
 **\PHPFUI\MySQLSlowQuery\Session** contains MySQL server information and are created on server restarts and log flushes. Pass the zero based session number to getEntries for only that Session's entries.
 Supported fields:
  * Server
+ * Version
  * Port
  * Transport
 
