@@ -1,9 +1,9 @@
 {
     "name": "phpfui/mysql-slow-log-parser",
-    "description": "MySQL Slow Query Log Parser featuring sortable results",
+    "description": "MySQL and MariaDB Slow Query Log Parser featuring sortable results",
     "minimum-stability": "stable",
-    "keywords": ["MySQL", "slow", "query", "log", "parser"],
-    "homepage": "http://www.phpfui.com",
+    "keywords": ["MySQL", "MariaDB", "slow", "query", "log", "parser"],
+    "homepage": "http://phpfui.com/?n=PHPFUI%5CMySQLSlowQuery"",
     "license": "MIT",
     "authors": [
         {
