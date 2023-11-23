@@ -110,6 +110,7 @@ class Entry extends \PHPFUI\MySQLSlowQuery\BaseObject
 		// # Query_time: 0.001519  Lock_time: 0.000214 Rows_sent: 0  Rows_examined: 0
 
 		$line = \trim($line);
+
 		// special handling for # User@Host: root[root] @ localhost [::1]  Id:     8
 		if (\strpos($line, 'User@Host:'))
 			{

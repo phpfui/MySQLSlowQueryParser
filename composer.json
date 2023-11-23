@@ -3,7 +3,7 @@
     "description": "MySQL and MariaDB Slow Query Log Parser featuring sortable results",
     "minimum-stability": "stable",
     "keywords": ["MySQL", "MariaDB", "slow", "query", "log", "parser"],
-    "homepage": "http://phpfui.com/?n=PHPFUI@MySQLSlowQuery",
+    "homepage": "http://phpfui.com/?n=PHPFUI\\MySQLSlowQuery",
     "license": "MIT",
     "authors": [
         {
@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=8.0 <8.3"
+        "php": ">=8.0 <8.4"
     },
     "require-dev": {
         "phpunit/phpunit": "<11.0",

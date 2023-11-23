@@ -206,6 +206,7 @@ class Parser
 				else
 					{
 					$timeLineFound = false;
+
 					// Parse any following comment lines, and interpret the next
 					// non-comment line as a query line.
 					do
@@ -220,7 +221,7 @@ class Parser
 						}
 					while (\strlen($line = $this->getNextLine()) > 0 && '#' === $line[0]); // @phpstan-ignore-line
 
-					if ('mariadb' == $parseMode && ! $timeLineFound && $previousTimeLine) // @phpstan-ignore-line
+					if ('mariadb' == $parseMode && ! $timeLineFound && $previousTimeLine)
 						{
 						// Always add the Time property. Assume that if it is not in the
 						// log, it's the same as the previous logged query, and that the
@@ -231,11 +232,12 @@ class Parser
 					}
 
 				// gather (more) query lines until a non-query line is reached
-				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0]) // @phpstan-ignore-line
+				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0])
 					{
 					if (0 === \stripos($line, self::PORT))	// found a new session header
 						{
 						$this->pushLine($line);
+
 						// Push this and previous line back on to stack. (Implicitly assume
 						// "TCP Port: " is on the second line of the new session header.)
 						if (\count($query))
