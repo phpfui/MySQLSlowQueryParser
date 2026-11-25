@@ -168,7 +168,7 @@ class Parser
 				// query in this session. In non backward compatible mode, check this:
 				// if it's not a comment line, this is assumed to be the start of the
 				// next session header (i.e. there are zero queries in this session).
-				if ('mariadb' === $parseMode && \strlen($line = $this->getNextLine()) > 0)
+				if ('mariadb' === $parseMode && \strlen($line = $this->getNextLine()) > 0)	// @phpstan-ignore-line
 					{
 					if ('#' !== $line[0])
 						{
@@ -232,7 +232,7 @@ class Parser
 					}
 
 				// gather (more) query lines until a non-query line is reached
-				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0])
+				while (\strlen($line = $this->getNextLine()) > 0 && '#' !== $line[0])	// @phpstan-ignore-line
 					{
 					if (0 === \stripos($line, self::PORT))	// found a new session header
 						{
